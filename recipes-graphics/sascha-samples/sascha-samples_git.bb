@@ -10,15 +10,17 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE.md;md5=dcf473723faabf17baa9b5f2207599d0"
 
 DEPENDS += "\
-    libgomp \
-    vulkan-headers \
+    compiler-rt \
+    libcxx \
+    openmp \
     python3-native \
+    vulkan-headers \
+    vulkan-loader \
    "
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
-ANY_OF_DISTRO_FEATURES = "x11 wayland"
 
-SRC_URI = "git://github.com/SaschaWillems/Vulkan.git;protocol=https;branch=master"
+SRC_URI = "gitsm://github.com/SaschaWillems/Vulkan.git;protocol=https;branch=master"
 
 SRCREV = "e79634e4da0a0bdcefa92b93d70350f784d9e40d"
 
@@ -27,24 +29,32 @@ S = "${WORKDIR}/git"
 inherit cmake features_check
 
 TOOLCHAIN = "clang"
+PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER:libgomp = "openmp"
 
-# must choose x11 or wayland or both
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
 
-PACKAGECONFIG[x11] = "-DUSE_WAYLAND_WSI=OFF, , libxcb libx11 libxrandr"
-PACKAGECONFIG[wayland] = "-DUSE_WAYLAND_WSI=ON, -DUSE_WAYLAND_WSI=OFF, wayland"
+PACKAGECONFIG[d2d] = "-DUSE_D2D_WSI=ON,"
+PACKAGECONFIG[headless] = "-DUSE_HEADLESS=ON,"
+PACKAGECONFIG[wayland] = "-DUSE_WAYLAND_WSI=ON,,wayland wayland-native wayland-protocols"
+PACKAGECONFIG[x11] = "-DUSE_WAYLAND_WSI=OFF,,libxcb libx11 libxrandr"
 
-do_patch:append() {
+# Default to d2d if nothing set
+EXTRA_OECMAKE += " \
+    -DRESOURCE_INSTALL_DIR=${datadir}/vulkan-samples/assets \
+    -DCMAKE_INSTALL_BINDIR=${bindir}/vulkan-samples \
+    ${@bb.utils.contains_any('PACKAGECONFIG', 'd2d headless wayland x11', '', ' -DUSE_D2D_WSI=ON', d)} \
+    "
+
+do_configure:prepend() {
     cd ${S}
     python3 download_assets.py
+    cd ${WORKDIR}/build
 }
 
-do_install() {
-    install -d ${D}${bindir}/sascha-samples
-    cp -r ${WORKDIR}/bin/* ${D}${bindir}/sascha-samples
-    cp ${S}/bin/* ${D}${bindir}/sascha-samples
-}
-
-FILES_${PN} = "${bindir}/sascha-samples"
+FILES:${PN} = "\
+    ${bindir}/vulkan-samples* \
+    ${datadir}/vulkan-samples/assets \
+    "
 
 BBCLASSEXTEND = ""
