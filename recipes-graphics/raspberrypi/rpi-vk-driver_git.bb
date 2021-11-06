@@ -19,6 +19,7 @@ DEPENDS += "\
     libcxx \
     python3-native \
     vulkan-headers \
+    vulkan-loader \
     zlib \
    "
 
