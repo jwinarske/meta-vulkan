@@ -22,9 +22,9 @@ DEPENDS += "\
     zlib \
    "
 
-SRC_URI = "git://github.com/Yours3lf/rpi-vk-driver.git;protocol=https;branch=master"
+SRC_URI = "git://github.com/meta-flutter/rpi-vk-driver.git;protocol=https;branch=simplify"
 
-SRCREV = "6bfd11b1ccb947e4eb8d1665083d56d66707de01"
+SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
 
@@ -32,23 +32,6 @@ inherit cmake features_check
 
 TOOLCHAIN = "clang"
 PREFERRED_PROVIDER:libgcc = "compiler-rt"
-
-REQUIRED_DISTRO_FEATURES = "vulkan"
-ANY_OF_DISTRO_FEATURES = "x11 wayland"
-
-# choose xcb or wayland
-PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland xcb', d)}"
-
-PACKAGECONFIG[xcb] = "-DBUILD_WSI_XCB_SUPPORT=ON, , virtual/libx11 libxcb libxrandr"
-PACKAGECONFIG[x11] = "-DBUILD_WSI_XLIB_SUPPORT=ON, , virtual/libx11 libxrandr"
-PACKAGECONFIG[wayland] = "-DBUILD_WSI_WAYLAND_SUPPORT=ON, , wayland wayland-native wayland-protocols"
-
-OECMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "BOTH"
-
-EXTRA_OECMAKE += "-DCMAKE_SKIP_INSTALL_RPATH=ON \
-                  -DBUILD_TESTING=OFF \
-                  ${PACKAGECONFIG_CONFARGS} \
-                 "
 
 FILES_${PN} = "${libdir}/librpi-vk-driver.so \
                ${datadir}/vulkan/icd.d/rpi-vk-driver.json \
