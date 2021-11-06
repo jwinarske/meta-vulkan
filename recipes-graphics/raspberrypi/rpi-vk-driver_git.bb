@@ -17,6 +17,7 @@ DEPENDS += "\
     expat \
     glibc \
     libcxx \
+    python3-native \
     vulkan-headers \
     zlib \
    "
