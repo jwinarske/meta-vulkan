@@ -9,8 +9,8 @@ LICENSE = "LGPL2.1"
 LIC_FILES_CHKSUM = "file://COPYING-LGPL2.1;md5=dcf473723faabf17baa9b5f2207599d0"
 
 DEPENDS += "\
+    assimp \
     compiler-rt \
-    libassimp \
     libcxx \
     openmp \
     python3-native \
