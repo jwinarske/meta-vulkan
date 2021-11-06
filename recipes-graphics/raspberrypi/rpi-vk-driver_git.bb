@@ -39,9 +39,9 @@ ANY_OF_DISTRO_FEATURES = "x11 wayland"
 # choose xcb or wayland
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland xcb', d)}"
 
-PACKAGECONFIG[xcb] = "-DBUILD_WSI_XCB_SUPPORT=ON, virtual/libx11 libxcb libxrandr"
-PACKAGECONFIG[x11] = "-DBUILD_WSI_XLIB_SUPPORT=ON, virtual/libx11 libxrandr"
-PACKAGECONFIG[wayland] = "-DBUILD_WSI_WAYLAND_SUPPORT=ON, wayland wayland-native wayland-protocols"
+PACKAGECONFIG[xcb] = "-DBUILD_WSI_XCB_SUPPORT=ON, , virtual/libx11 libxcb libxrandr"
+PACKAGECONFIG[x11] = "-DBUILD_WSI_XLIB_SUPPORT=ON, , virtual/libx11 libxrandr"
+PACKAGECONFIG[wayland] = "-DBUILD_WSI_WAYLAND_SUPPORT=ON, , wayland wayland-native wayland-protocols"
 
 OECMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "BOTH"
 
