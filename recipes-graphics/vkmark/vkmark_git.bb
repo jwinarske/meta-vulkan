@@ -6,7 +6,7 @@ BUGTRACKER = "https://github.com/vkmark/vkmark/issues"
 SECTION = "graphics"
 CVE_PRODUCT = ""
 LICENSE = "LGPL2.1"
-LIC_FILES_CHKSUM = "file://COPYING-LGPL2.1;md5=dcf473723faabf17baa9b5f2207599d0"
+LIC_FILES_CHKSUM = "file://COPYING-LGPL2.1;md5=4fbd65380cdd255951079008b364516c"
 
 DEPENDS += "\
     assimp \
