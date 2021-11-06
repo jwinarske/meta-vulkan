@@ -12,8 +12,6 @@ DEPENDS += "\
     assimp \
     compiler-rt \
     libcxx \
-    openmp \
-    python3-native \
     vulkan-headers \
     vulkan-loader \
    "
@@ -31,15 +29,15 @@ inherit meson pkgconfig features_check
 TOOLCHAIN = "clang"
 PREFERRED_PROVIDER:libgcc = "compiler-rt"
 
-PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
+PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland xcb', d)}"
 
 PACKAGECONFIG[kms] = "-Dkms=true,,drm virtual/libgbm"
 PACKAGECONFIG[wayland] = "-wayland=true,,wayland wayland-native wayland-protocols"
-PACKAGECONFIG[x11] = "-Dxcb=true,,virtual/libx11 libxcb"
+PACKAGECONFIG[xcb] = "-Dxcb=true,,virtual/libx11 libxcb"
 
 # Default to kms if nothing set
 EXTRA_OEMESON += " \
-    ${@bb.utils.contains_any('PACKAGECONFIG', 'kms wayland x11', '', ' -Dkms=true', d)} \
+    ${@bb.utils.contains_any('PACKAGECONFIG', 'kms wayland xcb', '', ' -Dkms=true', d)} \
     "
 
 FILES:${PN} = "\

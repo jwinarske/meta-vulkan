@@ -12,13 +12,13 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=0e9db807e4f1ed14373059c8499d5f82"
 
 DEPENDS += "\
+    compiler-rt \
+    drm \
     expat \
     glibc \
-    libdrm \
+    libcxx \
     vulkan-headers \
     zlib \
-    libcxx \
-    compiler-rt \
    "
 
 SRC_URI = "git://github.com/Yours3lf/rpi-vk-driver.git;protocol=https;branch=master"
@@ -35,11 +35,12 @@ PREFERRED_PROVIDER:libgcc = "compiler-rt"
 REQUIRED_DISTRO_FEATURES = "vulkan"
 ANY_OF_DISTRO_FEATURES = "x11 wayland"
 
-# choose x11, wayland or both
-PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
+# choose xcb or wayland
+PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland xcb', d)}"
 
-PACKAGECONFIG[x11] = "-DBUILD_WSI_XLIB_SUPPORT=ON -DBUILD_WSI_XCB_SUPPORT=ON, -DBUILD_WSI_XLIB_SUPPORT=OFF -DBUILD_WSI_XCB_SUPPORT=OFF, libxcb libx11 libxrandr"
-PACKAGECONFIG[wayland] = "-DBUILD_WSI_WAYLAND_SUPPORT=ON, -DBUILD_WSI_WAYLAND_SUPPORT=OFF, wayland wayland-native wayland-protocols"
+PACKAGECONFIG[xcb] = "-DBUILD_WSI_XCB_SUPPORT=ON, virtual/libx11 libxcb libxrandr"
+PACKAGECONFIG[x11] = "-DBUILD_WSI_XLIB_SUPPORT=ON, virtual/libx11 libxrandr"
+PACKAGECONFIG[wayland] = "-DBUILD_WSI_WAYLAND_SUPPORT=ON, wayland wayland-native wayland-protocols"
 
 OECMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "BOTH"
 
