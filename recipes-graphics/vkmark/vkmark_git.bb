@@ -11,6 +11,7 @@ LIC_FILES_CHKSUM = "file://COPYING-LGPL2.1;md5=4fbd65380cdd255951079008b364516c"
 DEPENDS += "\
     assimp \
     compiler-rt \
+    glm \
     libcxx \
     vulkan-headers \
     vulkan-loader \
@@ -18,21 +19,22 @@ DEPENDS += "\
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
 
-SRC_URI = "git://github.com/vkmark/vkmark.git;protocol=https;branch=master"
+SRC_URI = "git://github.com/jwinarske/vkmark.git;protocol=https;branch=stacksize_fix"
 
-SRCREV = "cf45f2faee236fd1118be2fcd27e4f2a91fc2e40"
+SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
 
 inherit meson pkgconfig features_check
 
+RUNTIME = "llvm"
 TOOLCHAIN = "clang"
 PREFERRED_PROVIDER:libgcc = "compiler-rt"
 
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland xcb', d)}"
 
 PACKAGECONFIG[kms] = "-Dkms=true,,drm virtual/libgbm"
-PACKAGECONFIG[wayland] = "-wayland=true,,wayland wayland-native wayland-protocols"
+PACKAGECONFIG[wayland] = "-Dwayland=true,,wayland wayland-native wayland-protocols"
 PACKAGECONFIG[xcb] = "-Dxcb=true,,virtual/libx11 libxcb"
 
 # Default to kms if nothing set
@@ -41,8 +43,9 @@ EXTRA_OEMESON += " \
     "
 
 FILES:${PN} = "\
-    ${bindir}/vkmark* \
-    ${datadir}/vulkan-samples/assets \
+    ${bindir}/vkmark \
+    ${libdir}/vkmark \
+    ${datadir}/vkmark \
     "
 
 BBCLASSEXTEND = ""
