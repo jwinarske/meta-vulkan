@@ -14,7 +14,6 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=0e9db807e4f1ed14373059c8499d5f82"
 DEPENDS += "\
     drm \
     expat \
-    libinput \
     python3-native \
     vulkan-headers \
     vulkan-loader \
@@ -30,6 +29,10 @@ S = "${WORKDIR}/git"
 inherit cmake
 
 OECMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "BOTH"
+
+EXTRA_OECMAKE += "\
+    -D BUILD_TESTING=OFF \
+    "
 
 FILES_${PN} = "${libdir}/librpi-vk-driver.so \
                ${datadir}/vulkan/icd.d/rpi-vk-driver.json \
