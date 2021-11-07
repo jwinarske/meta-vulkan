@@ -34,9 +34,9 @@ EXTRA_OECMAKE += "\
     -D BUILD_TESTING=OFF \
     "
 
-FILES_${PN} = "${libdir}/librpi-vk-driver.so \
+FILES:${PN} = "${libdir}/librpi-vk-driver.so \
                ${datadir}/vulkan/icd.d/rpi-vk-driver.json \
               "
-FILES_${PN}-dev = "${bindir}/QPUassemblerExe"
+FILES:${PN}-dev = "${bindir}/QPUassemblerExe"
 
 BBCLASSEXTEND = ""
