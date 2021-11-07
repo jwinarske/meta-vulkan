@@ -28,7 +28,9 @@ SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
 
-inherit cmake features_check
+inherit cmake
+
+OECMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "BOTH"
 
 TOOLCHAIN = "clang"
 PREFERRED_PROVIDER:libgcc = "compiler-rt"
