@@ -15,7 +15,6 @@ DEPENDS += "\
     compiler-rt \
     drm \
     expat \
-    glibc \
     libcxx \
     python3-native \
     vulkan-headers \
