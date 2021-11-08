@@ -35,8 +35,13 @@ RUNTIME = "llvm"
 TOOLCHAIN = "clang"
 PREFERRED_PROVIDER:libgcc = "compiler-rt"
 
-FILES:${PN} = "\
-    ${bindir} \
+do_install:append() {
+    install -d ${D}${datadir}/vkrunner/examples
+    cp -r ${S}/examples/* ${D}${datadir}/vkrunner/examples/
+}
+
+FILES:${PN} += "\
+    $[datadir} \
     "
 
 BBCLASSEXTEND = ""
