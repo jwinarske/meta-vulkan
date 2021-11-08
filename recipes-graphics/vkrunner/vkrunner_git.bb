@@ -18,7 +18,7 @@ DEPENDS += "\
    "
 
 RDEPENDS += "\
-    gslang \
+    glslang \
    "
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
