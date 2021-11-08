@@ -17,6 +17,10 @@ DEPENDS += "\
     vulkan-loader \
    "
 
+RDEPENDS += "\
+    gslang \
+   "
+
 REQUIRED_DISTRO_FEATURES = "vulkan"
 
 SRC_URI = "git://github.com/Igalia/vkrunner.git;protocol=https;branch=master"
