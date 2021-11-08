@@ -1,12 +1,12 @@
 SUMMARY = "Khronos-reference front end for GLSL/ESSL, partial front end for HLSL, and a SPIR-V generator."
 DESCRIPTION = "A comprehensive collection of open source C++ examples for Vulkan®, \
                the new generation graphics and compute API from Khronos."
-AUTHOR = "Sascha Willems"
+AUTHOR = "Khronos Group"
 HOMEPAGE = "https://github.com/KhronosGroup/glslang"
 BUGTRACKER = "https://github.com/KhronosGroup/glslang"
 SECTION = "graphics"
 CVE_PRODUCT = ""
-LICENSE = "CLOSED"
+LICENSE = "GPL2"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=c5ce49c0456e9b413b98a4368c378229"
 
 DEPENDS += "\
