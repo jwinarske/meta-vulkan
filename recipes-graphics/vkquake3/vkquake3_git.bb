@@ -38,4 +38,6 @@ FILES:${PN} = "\
     ${libdir} \
     "
 
+FILES:${PN}-dev = ""
+
 BBCLASSEXTEND = ""
