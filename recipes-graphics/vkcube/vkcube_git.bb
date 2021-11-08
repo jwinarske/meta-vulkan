@@ -9,6 +9,7 @@ LICENSE = "CLOSED"
 
 DEPENDS += "\
     drm \
+    libpng \
     virtual/libgbm \
     vulkan-headers \
     vulkan-loader \
