@@ -1,10 +1,10 @@
 SUMMARY = "Spinning Vulkan Cube"
-DESCRIPTION = "Vulkan demo that show minimum viable product for multiple platform support."
+DESCRIPTION = "Vulkan demo that illustrates minimum viable product for multi platform support."
 AUTHOR = "Kristian Hogsberg"
 HOMEPAGE = "https://github.com/krh/vkcube"
 BUGTRACKER = "https://github.com/krh/vkcube"
 SECTION = "graphics"
-CVE_PRODUCT = ""
+CVE_PRODUCT = "vkcube"
 LICENSE = "CLOSED"
 
 DEPENDS += "\
