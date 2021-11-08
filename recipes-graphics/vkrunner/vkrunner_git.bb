@@ -11,6 +11,8 @@ LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://COPYING;md5=2327139e51b79a3abbfec6568e92ecc5"
 
 DEPENDS += "\
+    compiler-rt \
+    libcxx \
     vulkan-headers \
     vulkan-loader \
    "
@@ -24,6 +26,10 @@ SRCREV = "1b4cc6b129e857d88ba9487bc8a4983d6a11df02"
 S = "${WORKDIR}/git"
 
 inherit cmake features_check
+
+RUNTIME = "llvm"
+TOOLCHAIN = "clang"
+PREFERRED_PROVIDER:libgcc = "compiler-rt"
 
 FILES:${PN} = "\
     ${bindir} \

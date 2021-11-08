@@ -9,6 +9,8 @@ LICENSE = "GPL-2.0"
 LIC_FILES_CHKSUM = "file://COPYING.txt;md5=87113aa2b484c59a17085b5c3f900ebf"
 
 DEPENDS += "\
+    compiler-rt \
+    libcxx \
     libevdev \
     libinput \
     libsdl2 \
@@ -28,6 +30,10 @@ SRCREV = "${AUTOREV}"
 S = "${WORKDIR}/git"
 
 inherit cmake features_check
+
+RUNTIME = "llvm"
+TOOLCHAIN = "clang"
+PREFERRED_PROVIDER:libgcc = "compiler-rt"
 
 EXTRA_OECMAKE += "\
     -D ARCH_STRING=${TARGET_ARCH} \

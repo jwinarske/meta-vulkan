@@ -8,7 +8,9 @@ CVE_PRODUCT = "vkcube"
 LICENSE = "CLOSED"
 
 DEPENDS += "\
+    compiler-rt \
     drm \
+    libcxx \
     libpng \
     virtual/libgbm \
     vulkan-headers \
@@ -22,6 +24,10 @@ SRC_URI = "git://github.com/jwinarske/vkcube.git;protocol=https;branch=yocto"
 SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
+
+RUNTIME = "llvm"
+TOOLCHAIN = "clang"
+PREFERRED_PROVIDER:libgcc = "compiler-rt"
 
 inherit meson pkgconfig features_check
 

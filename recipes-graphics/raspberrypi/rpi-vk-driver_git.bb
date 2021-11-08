@@ -12,8 +12,10 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=0e9db807e4f1ed14373059c8499d5f82"
 
 DEPENDS += "\
+    compiler-rt \
     drm \
     expat \
+    libcxx \
     python3-native \
     vulkan-headers \
     vulkan-loader \
@@ -25,6 +27,10 @@ SRC_URI = "git://github.com/meta-flutter/rpi-vk-driver.git;protocol=https;branch
 SRCREV = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
+
+RUNTIME = "llvm"
+TOOLCHAIN = "clang"
+PREFERRED_PROVIDER:libgcc = "compiler-rt"
 
 inherit cmake
 
