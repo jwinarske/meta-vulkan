@@ -17,7 +17,7 @@ DEPENDS += "\
     vulkan-loader \
    "
 
-RDEPENDS += "\
+RDEPENDS:vkrunner += "\
     glslang \
    "
 
