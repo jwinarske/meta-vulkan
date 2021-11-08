@@ -5,11 +5,11 @@ HOMEPAGE = "https://github.com/krh/vkcube"
 BUGTRACKER = "https://github.com/krh/vkcube"
 SECTION = "graphics"
 CVE_PRODUCT = ""
-LICENSE = "MIT"
+LICENSE = "CLOSED"
 
 DEPENDS += "\
     drm \
-    virutal/libgbm \
+    virtual/libgbm \
     vulkan-headers \
     vulkan-loader \
    "
