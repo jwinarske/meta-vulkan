@@ -33,19 +33,14 @@ PREFERRED_PROVIDER:libgcc = "compiler-rt"
 
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland xcb', d)}"
 
-PACKAGECONFIG[kms] = "-Dkms=true,,drm virtual/libgbm"
-PACKAGECONFIG[wayland] = "-Dwayland=true,,wayland wayland-native wayland-protocols"
-PACKAGECONFIG[xcb] = "-Dxcb=true,,virtual/libx11 libxcb"
+PACKAGECONFIG[kms] = "-Dkms=true,-Dkms=false,drm virtual/libgbm"
+PACKAGECONFIG[wayland] = "-Dwayland=true,-Dwayland=false,wayland wayland-native wayland-protocols"
+PACKAGECONFIG[xcb] = "-Dxcb=true,-Dxcb=false,virtual/libx11 libxcb"
 
 # Default to kms if nothing set
-EXTRA_OEMESON += " \
-    ${@bb.utils.contains_any('PACKAGECONFIG', 'kms wayland xcb', '', ' -Dkms=true', d)} \
-    "
+EXTRA_OEMESON += "${@bb.utils.contains_any('PACKAGECONFIG', 'kms wayland xcb', '', ' -Dkms=true', d)}"
 
-FILES:${PN} = "\
-    ${bindir}/vkmark \
-    ${libdir}/vkmark \
-    ${datadir}/vkmark \
-    "
+# strange build break looking for headers
+do_compile[depends] += "vulkan-headers:do_populate_sysroot"
 
 BBCLASSEXTEND = ""
