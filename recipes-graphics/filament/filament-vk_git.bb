@@ -11,7 +11,6 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 DEPENDS += "\
     compiler-rt \
     libcxx \
-    llvm \
     "
 
 DEPENDS:class-target += "\
@@ -23,7 +22,7 @@ DEPENDS:class-target += "\
 PV .= "+${SRCPV}"
 
 SRC_URI = "git://github.com/meta-flutter/filament;protocol=https;branch=yocto \
-           file://ImportExecutables-Release.cmake"
+           file://ImportExecutables-Release.cmake.in"
 
 SRCREV = "${AUTOREV}"
 
@@ -60,6 +59,7 @@ EXTRA_OECMAKE:class-target += " \
     -D CMAKE_BUILD_TYPE=Release \
     -D IMPORT_EXECUTABLES_DIR=. \
     -D FILAMENT_SKIP_SDL2=ON \
+    -D DIST_ARCH=${BUILD_ARCH} \
     -D FILAMENT_HOST_TOOLS_ROOT=${STAGING_BINDIR_NATIVE} \
     ${PACKAGECONFIG_CONFARGS} \
     "
@@ -74,15 +74,14 @@ do_install:append:class-native () {
 }
 
 do_install:append:class-target () {
-    install -d ${D}${libdir}/filament
     mv ${D}${libdir}/*/*.a ${D}${libdir}
-    rm -rf ${D}${libdir}/x86_64
+    rm -rf ${D}${libdir}/${BUILD_ARCH}
     rm ${D}/usr/LICENSE
     rm ${D}/usr/README.md
 }
 
 FILES:${PN}-staticdev += " \
-    ${libdir}/filament \
+    ${libdir} \
     "
 
 BBCLASSEXTEND += "native nativesdk"
