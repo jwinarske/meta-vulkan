@@ -22,7 +22,7 @@ DEPENDS:class-target += "\
 PV .= "+${SRCPV}"
 
 SRC_URI = "git://github.com/meta-flutter/filament;protocol=https;branch=yocto \
-           file://ImportExecutables-Release.cmake.in"
+           file://ImportExecutables-Release.cmake"
 
 SRCREV = "${AUTOREV}"
 
