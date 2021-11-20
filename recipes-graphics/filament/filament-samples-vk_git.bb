@@ -28,6 +28,8 @@ PV .= "+${SRCPV}"
 
 SRC_URI = "git://github.com/jwinarske/filament-samples;protocol=https;branch=main"
 
+S = "${WORKDIR}/git"
+
 SRCREV = "${AUTOREV}"
 
 RUNTIME = "llvm"
