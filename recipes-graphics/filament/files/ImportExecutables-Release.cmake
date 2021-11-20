@@ -62,37 +62,37 @@ add_executable(glslminifier IMPORTED)
 # Import target "matc" for configuration "Release"
 set_property(TARGET matc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(matc PROPERTIES
-  IMPORTED_LOCATION_RELEASE "@MATC_PATH@"
+  IMPORTED_LOCATION_RELEASE "${FILAMENT_HOST_TOOLS_ROOT}/matc"
   )
 
 # Import target "cmgen" for configuration "Release"
 set_property(TARGET cmgen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(cmgen PROPERTIES
-  IMPORTED_LOCATION_RELEASE "@CMGEN_PATH@"
+  IMPORTED_LOCATION_RELEASE "${FILAMENT_HOST_TOOLS_ROOT}/cmgen"
   )
 
 # Import target "filamesh" for configuration "Release"
 set_property(TARGET filamesh APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(filamesh PROPERTIES
-  IMPORTED_LOCATION_RELEASE "@FILAMESH_PATH@"
+  IMPORTED_LOCATION_RELEASE "${FILAMENT_HOST_TOOLS_ROOT}/filamesh"
   )
 
 # Import target "mipgen" for configuration "Release"
 set_property(TARGET mipgen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(mipgen PROPERTIES
-  IMPORTED_LOCATION_RELEASE "@MIPGEN_PATH@"
+  IMPORTED_LOCATION_RELEASE "${FILAMENT_HOST_TOOLS_ROOT}/mipgen"
   )
 
 # Import target "resgen" for configuration "Release"
 set_property(TARGET resgen APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(resgen PROPERTIES
-  IMPORTED_LOCATION_RELEASE "@RESGEN_PATH@"
+  IMPORTED_LOCATION_RELEASE "${FILAMENT_HOST_TOOLS_ROOT}/resgen"
   )
 
 # Import target "glslminifier" for configuration "Release"
 set_property(TARGET glslminifier APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(glslminifier PROPERTIES
-  IMPORTED_LOCATION_RELEASE "@GLSLMINIFIER_PATH@"
+  IMPORTED_LOCATION_RELEASE "${FILAMENT_HOST_TOOLS_ROOT}/glslminifier"
   )
 
 # This file does not depend on other imported targets which have

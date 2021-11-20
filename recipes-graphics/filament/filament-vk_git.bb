@@ -23,7 +23,7 @@ DEPENDS:class-target += "\
 PV .= "+${SRCPV}"
 
 SRC_URI = "git://github.com/meta-flutter/filament;protocol=https;branch=yocto \
-           file://ImportExecutables-Release.cmake.in"
+           file://ImportExecutables-Release.cmake"
 
 SRCREV = "${AUTOREV}"
 
@@ -60,17 +60,12 @@ EXTRA_OECMAKE:class-target += " \
     -D CMAKE_BUILD_TYPE=Release \
     -D IMPORT_EXECUTABLES_DIR=. \
     -D FILAMENT_SKIP_SDL2=ON \
+    -D FILAMENT_HOST_TOOLS_ROOT=${STAGING_BINDIR_NATIVE} \
     ${PACKAGECONFIG_CONFARGS} \
     "
 
 do_configure:prepend:class-target () {
-    cp ${WORKDIR}/ImportExecutables-Release.cmake.in ${S}/ImportExecutables-Release.cmake
-    sed -i "s|@MATC_PATH@|${STAGING_BINDIR_NATIVE}/matc|g" ${S}/ImportExecutables-Release.cmake
-    sed -i "s|@CMGEN_PATH@|${STAGING_BINDIR_NATIVE}/cmgen|g" ${S}/ImportExecutables-Release.cmake
-    sed -i "s|@FILAMESH_PATH@|${STAGING_BINDIR_NATIVE}/filamesh|g" ${S}/ImportExecutables-Release.cmake
-    sed -i "s|@MIPGEN_PATH@|${STAGING_BINDIR_NATIVE}/mipgen|g" ${S}/ImportExecutables-Release.cmake
-    sed -i "s|@RESGEN_PATH@|${STAGING_BINDIR_NATIVE}/resgen|g" ${S}/ImportExecutables-Release.cmake
-    sed -i "s|@GLSLMINIFIER_PATH@|${STAGING_BINDIR_NATIVE}/glslminifier|g" ${S}/ImportExecutables-Release.cmake
+    cp ${WORKDIR}/ImportExecutables-Release.cmake ${S}/ImportExecutables-Release.cmake
 }
 
 do_install:append:class-native () {
