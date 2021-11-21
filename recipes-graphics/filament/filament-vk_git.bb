@@ -15,7 +15,6 @@ DEPENDS += "\
 
 DEPENDS:class-target += "\
     filament-vk-native \
-    vulkan-headers \
     vulkan-loader \
     "
 
@@ -42,10 +41,10 @@ inherit cmake pkgconfig
 
 EXTRA_OECMAKE:class-native += " \
     -D BUILD_SHARED_LIBS=OFF \
+    -D CMAKE_BUILD_TYPE=Release \
     -D FILAMENT_SUPPORTS_VULKAN=ON \
     -D FILAMENT_SUPPORTS_OPENGL=OFF \
     -D FILAMENT_BUILD_FILAMAT=OFF \
-    -D CMAKE_BUILD_TYPE=Release \
     -D FILAMENT_SKIP_SAMPLES=ON \
     -D FILAMENT_SKIP_SDL2=ON \
     ${PACKAGECONFIG_CONFARGS} \
@@ -53,10 +52,10 @@ EXTRA_OECMAKE:class-native += " \
 
 EXTRA_OECMAKE:class-target += " \
     -D BUILD_SHARED_LIBS=OFF \
+    -D CMAKE_BUILD_TYPE=Release \
     -D FILAMENT_SUPPORTS_VULKAN=ON \
     -D FILAMENT_SUPPORTS_OPENGL=OFF \
     -D FILAMENT_LINUX_IS_MOBILE=ON \
-    -D CMAKE_BUILD_TYPE=Release \
     -D IMPORT_EXECUTABLES_DIR=. \
     -D FILAMENT_SKIP_SDL2=ON \
     -D DIST_ARCH=${BUILD_ARCH} \
@@ -65,7 +64,7 @@ EXTRA_OECMAKE:class-target += " \
     "
 
 do_configure:prepend:class-target () {
-    cp ${WORKDIR}/ImportExecutables-Release.cmake ${S}/ImportExecutables-Release.cmake
+    cp ${WORKDIR}/ImportExecutables-Release.cmake ${S}
 }
 
 do_install:append:class-native () {

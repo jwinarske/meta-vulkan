@@ -16,9 +16,7 @@ DEPENDS += "\
     libcxx \
     libpng \
     libxkbcommon \
-    llvm \
     virtual/egl \
-    vulkan-headers \
     vulkan-loader \
     wayland \
     wayland-native \
@@ -44,9 +42,8 @@ PACKAGECONFIG[x11] = "-DFILAMENT_SUPPORTS_X11=ON,-DFILAMENT_SUPPORTS_X11=OFF,lib
 inherit cmake pkgconfig
 
 EXTRA_OECMAKE += " \
-    -D CMAKE_SYSROOT=${STAGING_DIR_TARGET}/usr \
-    -D CMAKE_BUILD_TYPE=Release \
     -D BUILD_SHARED_LIBS=OFF \
+    -D CMAKE_BUILD_TYPE=Release \
     -D FILAMENT_SUPPORTS_VULKAN=ON \
     -D FILAMENT_SUPPORTS_OPENGL=OFF \
     -D FILAMENT_LINUX_IS_MOBILE=ON \
