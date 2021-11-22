@@ -15,6 +15,7 @@ DEPENDS += "\
     filament-vk-native \
     libcxx \
     libpng \
+    libsdl2 \
     libxkbcommon \
     virtual/egl \
     vulkan-loader \
