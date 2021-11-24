@@ -80,20 +80,20 @@ do_install() {
 
     cd ${S}/build/release-linux-${TARGET_ARCH}
 
-    cp ioquake3.aarch64 ${D}/usr/games/vkquake3/
-    cp ioq3ded.aarch64 ${D}/usr/games/vkquake3/
+    cp ioquake3.${TARGET_ARCH} ${D}/usr/games/vkquake3/
+    cp ioq3ded.${TARGET_ARCH} ${D}/usr/games/vkquake3/
 
-    cp baseq3/cgameaarch64.so ${D}/usr/games/vkquake3/baseq3/
-    cp baseq3/qagameaarch64.so ${D}/usr/games/vkquake3/baseq3/
-    cp baseq3/uiaarch64.so ${D}/usr/games/vkquake3/baseq3/
+    cp baseq3/cgame${TARGET_ARCH}.so ${D}/usr/games/vkquake3/baseq3/
+    cp baseq3/qagame${TARGET_ARCH}.so ${D}/usr/games/vkquake3/baseq3/
+    cp baseq3/ui${TARGET_ARCH}.so ${D}/usr/games/vkquake3/baseq3/
 
-    cp missionpack/cgameaarch64.so ${D}/usr/games/vkquake3/missionpack/
-    cp missionpack/qagameaarch64.so ${D}/usr/games/vkquake3/missionpack/
-    cp missionpack/uiaarch64.so ${D}/usr/games/vkquake3/missionpack/
+    cp missionpack/cgame${TARGET_ARCH}.so ${D}/usr/games/vkquake3/missionpack/
+    cp missionpack/qagame${TARGET_ARCH}.so ${D}/usr/games/vkquake3/missionpack/
+    cp missionpack/ui${TARGET_ARCH}.so ${D}/usr/games/vkquake3/missionpack/
 
-    cp renderer_opengl1_aarch64.so ${D}/usr/games/vkquake3/
-    cp renderer_opengl2_aarch64.so ${D}/usr/games/vkquake3/
-    cp renderer_vulkan_aarch64.so ${D}/usr/games/vkquake3/
+    cp renderer_opengl1_${TARGET_ARCH}.so ${D}/usr/games/vkquake3/
+    cp renderer_opengl2_${TARGET_ARCH}.so ${D}/usr/games/vkquake3/
+    cp renderer_vulkan_${TARGET_ARCH}.so ${D}/usr/games/vkquake3/
 }
 
 FILES:${PN} = "/usr/games"
