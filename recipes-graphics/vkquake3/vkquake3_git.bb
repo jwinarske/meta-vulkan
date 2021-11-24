@@ -29,6 +29,20 @@ DEPENDS += "\
     zlib \
    "
 
+RDEPENDS:${PN} += "\
+   curl \
+   jpeg \
+   libegl-mesa \
+   libgles1-mesa \
+   libgles2-mesa \
+   libogg \
+   libopus \
+   libvorbis \
+   openal-soft \
+   opusfile \
+   zlib \
+   "
+
 REQUIRED_DISTRO_FEATURES = "vulkan opengl"
 
 SRC_URI = "git://github.com/suijingfeng/vkQuake3.git;protocol=https;branch=master"
