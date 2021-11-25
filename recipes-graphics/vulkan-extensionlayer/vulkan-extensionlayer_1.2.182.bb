@@ -17,15 +17,13 @@ DEPENDS += "\
     vulkan-headers \
    "
 
-REQUIRED_DISTRO_FEATURES = "vulkan"
-
 SRC_URI = "git://github.com/KhronosGroup/Vulkan-ExtensionLayer.git;protocol=https"
 
 SRCREV = "v${PV}"
 
 S = "${WORKDIR}/git"
 
-inherit cmake features_check
+inherit cmake
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"

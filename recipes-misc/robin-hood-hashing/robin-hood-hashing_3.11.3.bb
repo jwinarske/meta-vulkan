@@ -15,11 +15,11 @@ DEPENDS += "\
 
 SRC_URI = "git://github.com/martinus/robin-hood-hashing.git;protocol=https"
 
-SRCREV = "v${PV}"
+SRCREV = "${PV}"
 
 S = "${WORKDIR}/git"
 
-inherit cmake features_check
+inherit cmake
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"

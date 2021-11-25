@@ -26,15 +26,13 @@ DEPENDS += "\
     vulkan-loader \
    "
 
-REQUIRED_DISTRO_FEATURES = "vulkan"
-
 SRC_URI = "git://github.com/KhronosGroup/Vulkan-ValidationLayers.git;protocol=https"
 
 SRCREV = "v${PV}"
 
 S = "${WORKDIR}/git"
 
-inherit cmake features_check
+inherit cmake
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
