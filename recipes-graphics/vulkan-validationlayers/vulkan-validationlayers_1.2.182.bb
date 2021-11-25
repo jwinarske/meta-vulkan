@@ -17,13 +17,13 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=8df9e8826734226d08cb412babfa599c"
 
 DEPENDS += "\
     compiler-rt \
-    glslang \
+    glslang-native \
     libcxx \
-    openmp \
     python3-native \
+    robin-hood-hashing \
     spirv-headers \
-    spirv-tools \
-    vulkan-headers \
+    spirv-tools-native \
+    vulkan-loader \
    "
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
@@ -39,7 +39,6 @@ inherit cmake features_check
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
 PREFERRED_PROVIDER:libgcc = "compiler-rt"
-PREFERRED_PROVIDER:libgomp = "openmp"
 
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
 
@@ -47,6 +46,9 @@ PACKAGECONFIG[wayland] = "-DBUILD_WSI_WAYLAND_SUPPORT=ON,-DBUILD_WSI_WAYLAND_SUP
 PACKAGECONFIG[x11] = "-DBUILD_WSI_XCB_SUPPORT=ON -DBUILD_WSI_XLIB_SUPPORT=ON,-DBUILD_WSI_XCB_SUPPORT=OFF -DBUILD_WSI_XLIB_SUPPORT=OFF,libxcb libx11 libxrandr"
 
 EXTRA_OECMAKE += " \
+    -D GLSLANG_INSTALL_DIR=${STAGING_BINDIR_NATIVE} \
+    -D SPIRV_HEADERS_INSTALL_DIR=${STAGING_INCDIR} \
+    -D SPIRV_TOOLS_INSTALL_DIR=${STAGING_BINDIR_NATIVE} \
     "
 
 do_install:append () {

@@ -7,13 +7,12 @@ BUGTRACKER = "https://github.com/ARM-software/perfdoc/issues"
 SECTION = "graphics"
 CVE_PRODUCT = ""
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://LICENSE.md;md5=dcf6622c76d01ba8c068628ba51a4d27"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=dcf6622c76d01ba8c068628ba51a4d27"
 
 DEPENDS += "\
     compiler-rt \
     libcxx \
-    openmp \
-    vulkan-loader \
+    vulkan-headers \
    "
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
@@ -29,12 +28,21 @@ inherit cmake features_check
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
 PREFERRED_PROVIDER:libgcc = "compiler-rt"
-PREFERRED_PROVIDER:libgomp = "openmp"
 
 EXTRA_OECMAKE += "-D PERFDOC_TESTS=OFF"
 
-do_install:append() {
-    error
+do_install() {
+    install -d ${D}${libdir}
+    install -d ${D}${datadir}/Vulkan
+    install -m 644 layer/libVkLayer_mali_perf_doc.so ${D}${datadir}/Vulkan
+    install -m 644 layer/VkLayer_mali_perf_doc.json ${D}${libdir}/Vulkan
 }
+
+FILES:${PN} = " \
+    ${datadir} \
+    ${libdir} \
+    "
+
+FILES:${PN}-dev = ""
 
 BBCLASSEXTEND = ""

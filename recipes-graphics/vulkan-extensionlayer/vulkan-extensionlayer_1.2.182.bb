@@ -32,8 +32,11 @@ TOOLCHAIN = "clang"
 PREFERRED_PROVIDER:libgcc = "compiler-rt"
 PREFERRED_PROVIDER:libgomp = "openmp"
 
-do_install:append() {
-    error
-}
+FILES:${PN} = " \
+    ${libdir} \
+    ${datadir} \
+    "
+
+FILES:${PN}-dev = ""
 
 BBCLASSEXTEND = ""
