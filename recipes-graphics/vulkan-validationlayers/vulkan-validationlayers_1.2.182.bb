@@ -7,7 +7,7 @@ DESCRIPTION = "Vulkan is an Explicit API, enabling direct control over \
                This project provides Vulkan validation layers that can \
                be enabled to assist development by enabling developers to \
                verify their applications correct use of the Vulkan API."
-AUTHOR = "ARM"
+AUTHOR = "Khronos"
 HOMEPAGE = "https://github.com/KhronosGroup/Vulkan-ValidationLayers"
 BUGTRACKER = "https://github.com/KhronosGroup/Vulkan-ValidationLayers/issues"
 SECTION = "graphics"
@@ -17,18 +17,18 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=8df9e8826734226d08cb412babfa599c"
 
 DEPENDS += "\
     compiler-rt \
-    glslang-native \
+    glslang \
     libcxx \
-    python3-native \
-    robin-hood-hashing \
     spirv-headers \
-    spirv-tools-native \
-    vulkan-loader \
+    spirv-tools \
+    vulkan-headers \
    "
 
-SRC_URI = "git://github.com/KhronosGroup/Vulkan-ValidationLayers.git;protocol=https"
+SRC_URI = "git://github.com/KhronosGroup/Vulkan-ValidationLayers.git;protocol=https;name=layers \
+           git://github.com/martinus/robin-hood-hashing.git;protocol=https;destsuffix=git/robin-hood;name=robin_hood"
 
-SRCREV = "v${PV}"
+SRCREV_layers = "v${PV}"
+SRCREV_robin_hood = "3.11.3"
 
 S = "${WORKDIR}/git"
 
@@ -43,14 +43,22 @@ PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
 PACKAGECONFIG[wayland] = "-DBUILD_WSI_WAYLAND_SUPPORT=ON,-DBUILD_WSI_WAYLAND_SUPPORT=OFF,wayland wayland-native wayland-protocols"
 PACKAGECONFIG[x11] = "-DBUILD_WSI_XCB_SUPPORT=ON -DBUILD_WSI_XLIB_SUPPORT=ON,-DBUILD_WSI_XCB_SUPPORT=OFF -DBUILD_WSI_XLIB_SUPPORT=OFF,libxcb libx11 libxrandr"
 
+
 EXTRA_OECMAKE += " \
-    -D GLSLANG_INSTALL_DIR=${STAGING_BINDIR_NATIVE} \
-    -D SPIRV_HEADERS_INSTALL_DIR=${STAGING_INCDIR} \
-    -D SPIRV_TOOLS_INSTALL_DIR=${STAGING_BINDIR_NATIVE} \
+    -D VulkanHeaders_INCLUDE_DIR=${STAGING_INCDIR} \
+    -D VulkanRegistry_DIR=${RECIPE_SYSROOT}/${datadir} \
+    -D GLSLANG_INSTALL_DIR=${STAGING_DIR_TARGET} \
+    -D SPIRV_HEADERS_INSTALL_DIR=${STAGING_DIR_TARGET} \
+    -D SPIRV_TOOLS_INSTALL_DIR=${STAGING_DIR_TARGET} \
+    -D ROBIN_HOOD_HASHING_INSTALL_DIR=${S}/robin-hood \
+    -D BUILD_WERROR=OFF \
     "
 
-do_install:append () {
-    error
-}
+FILES:${PN} = " \
+    ${libdir} \
+    ${datadir} \
+    "
+
+FILES:${PN}-dev = ""
 
 BBCLASSEXTEND = ""
