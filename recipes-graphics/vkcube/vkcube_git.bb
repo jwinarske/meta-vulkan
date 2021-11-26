@@ -13,7 +13,6 @@ DEPENDS += "\
     libcxx \
     libpng \
     virtual/libgbm \
-    vulkan-headers \
     vulkan-loader \
    "
 
@@ -31,10 +30,15 @@ PREFERRED_PROVIDER:libgcc = "compiler-rt"
 
 inherit meson pkgconfig features_check
 
-PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland xcb', d)}"
+PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
 
 PACKAGECONFIG[wayland] = "-Dwayland=true,-Dwayland=false,wayland wayland-native wayland-protocols"
 PACKAGECONFIG[xcb] = "-Dxcb=true,-Dxcb=false,virtual/libx11 libxcb"
+
+do_install() {
+    install -d ${D}${bindir}
+    cp vkcube ${D}${bindir}
+}
 
 FILES:${PN} = "\
     ${bindir} \
