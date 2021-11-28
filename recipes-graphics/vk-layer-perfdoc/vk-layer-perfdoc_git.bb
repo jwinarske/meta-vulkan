@@ -32,15 +32,12 @@ PREFERRED_PROVIDER:libgcc = "compiler-rt"
 EXTRA_OECMAKE += "-D PERFDOC_TESTS=OFF"
 
 do_install() {
-    install -d ${D}${libdir}
-    install -m 644 layer/libVkLayer_mali_perf_doc.so ${D}${libdir}/Vulkan
-
-    install -d ${D}${datadir}/Vulkan
-    install -m 644 layer/VkLayer_mali_perf_doc.json ${D}${datadir}/Vulkan
+    install -d ${D}${datadir}/vulkan
+    install -m 644 layer/libVkLayer_mali_perf_doc.so ${D}${datadir}/vulkan
+    install -m 644 layer/VkLayer_mali_perf_doc.json ${D}${datadir}/vulkan
 }
 
 FILES:${PN} = " \
-    ${libdir} \
     ${datadir} \
     "
 
