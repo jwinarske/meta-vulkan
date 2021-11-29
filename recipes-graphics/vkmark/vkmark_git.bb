@@ -40,6 +40,10 @@ PACKAGECONFIG[xcb] = "-Dxcb=true,-Dxcb=false,virtual/libx11 libxcb"
 # Default to kms if nothing set
 EXTRA_OEMESON += "${@bb.utils.contains_any('PACKAGECONFIG', 'kms wayland xcb', '', ' -Dkms=true', d)}"
 
+do_configure:prepend() {
+    export VULKAN_SDK="${STAGING_DIR_TARGET}/usr"
+}
+
 # strange build break looking for headers
 do_compile[depends] += "vulkan-headers:do_populate_sysroot"
 
