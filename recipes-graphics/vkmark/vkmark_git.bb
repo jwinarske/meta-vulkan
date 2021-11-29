@@ -19,7 +19,7 @@ DEPENDS += "\
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
 
-SRC_URI = "git://github.com/jwinarske/vkmark.git;protocol=https;branch=stacksize_fix"
+SRC_URI = "git://github.com/jwinarske/vkmark.git;protocol=https;branch=jw/vulkan_dep"
 
 SRCREV = "${AUTOREV}"
 
@@ -37,14 +37,33 @@ PACKAGECONFIG[kms] = "-Dkms=true,-Dkms=false,drm virtual/libgbm"
 PACKAGECONFIG[wayland] = "-Dwayland=true,-Dwayland=false,wayland wayland-native wayland-protocols"
 PACKAGECONFIG[xcb] = "-Dxcb=true,-Dxcb=false,virtual/libx11 libxcb"
 
-# Default to kms if nothing set
-EXTRA_OEMESON += "${@bb.utils.contains_any('PACKAGECONFIG', 'kms wayland xcb', '', ' -Dkms=true', d)}"
+EXTRA_OEMESON += "--prefix ${STAGING_DIR_TARGET}/usr"
 
-do_configure:prepend() {
-    export VULKAN_SDK="${STAGING_DIR_TARGET}/usr"
+do_install() {
+    install -d ${D}${bindir}
+    cp ${WORKDIR}/build/src/vkmark ${D}${bindir}
+
+    install -d ${D}${libdir}
+    cp ${WORKDIR}/build/src/wayland.so ${D}${libdir}
+
+    install -d ${D}${datadir}/vkmark/models
+    cp -r ${S}/data/models/* ${D}${datadir}/vkmark/models
+
+    install -d ${D}${datadir}/vkmark/shaders
+    cp -r ${S}/data/shaders/* ${D}${datadir}/vkmark/shaders
+
+    install -d ${D}${datadir}/vkmark/textures
+    cp -r ${S}/data/textures/* ${D}${datadir}/vkmark/textures
+
+    rm -rf ${D}${datadir}/man
 }
 
-# strange build break looking for headers
-do_compile[depends] += "vulkan-headers:do_populate_sysroot"
+FILES:${PN} += "\
+    ${bindir} \
+    ${libdir} \
+    ${datadir} \
+    "
+
+FILES:${PN}-dev = ""
 
 BBCLASSEXTEND = ""
