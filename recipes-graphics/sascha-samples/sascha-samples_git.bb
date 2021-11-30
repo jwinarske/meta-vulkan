@@ -32,29 +32,28 @@ inherit cmake features_check
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
-PREFERRED_PROVIDER:libgomp = "openmp"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgomp = "openmp"
 
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
 
-PACKAGECONFIG[d2d] = "-DUSE_D2D_WSI=ON,"
-PACKAGECONFIG[headless] = "-DUSE_HEADLESS=ON,"
-PACKAGECONFIG[wayland] = "-DUSE_WAYLAND_WSI=ON,,wayland wayland-native wayland-protocols"
-PACKAGECONFIG[x11] = "-DUSE_WAYLAND_WSI=OFF,,libxcb libx11 libxrandr"
+PACKAGECONFIG[d2d] = "-DUSE_D2D_WSI=ON,-DUSE_D2D_WSI=OFF"
+PACKAGECONFIG[headless] = "-DUSE_HEADLESS=ON,-DUSE_HEADLESS=OFF"
+PACKAGECONFIG[wayland] = "-DUSE_WAYLAND_WSI=ON,-DUSE_WAYLAND_WSI=OFF,wayland wayland-native wayland-protocols"
+PACKAGECONFIG[x11] = ",,libxcb libx11 libxrandr"
 
 # Default to d2d if nothing set
 EXTRA_OECMAKE += " \
     -DRESOURCE_INSTALL_DIR=${datadir}/vulkan-samples/assets \
     -DCMAKE_INSTALL_BINDIR=${bindir}/vulkan-samples \
-    ${@bb.utils.contains_any('PACKAGECONFIG', 'd2d headless wayland x11', '', ' -DUSE_D2D_WSI=ON', d)} \
     "
 
-FILES:${PN} = "\
+FILES_${PN} = "\
     ${bindir}/vulkan-samples* \
     ${datadir}/vulkan-samples/assets \
     "
 
-do_configure:prepend () {
+do_configure_prepend () {
     cp -r ${WORKDIR}/assets/* ${S}/data/
     rm -rf ${WORKDIR}/assets
 }

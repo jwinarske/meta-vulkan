@@ -29,7 +29,7 @@ DEPENDS += "\
     zlib \
    "
 
-RDEPENDS:${PN} += "\
+RDEPENDS_${PN} += "\
    curl \
    jpeg \
    libegl-mesa \
@@ -53,7 +53,7 @@ S = "${WORKDIR}/git"
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 inherit autotools-brokensep features_check
 
@@ -96,6 +96,6 @@ do_install() {
     cp renderer_vulkan_${TARGET_ARCH}.so ${D}/usr/games/vkquake3/
 }
 
-FILES:${PN} = "/usr/games"
+FILES_${PN} = "/usr/games"
 
 BBCLASSEXTEND = ""

@@ -26,7 +26,7 @@ S = "${WORKDIR}/git"
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 inherit meson pkgconfig features_check
 
@@ -40,7 +40,7 @@ do_install() {
     cp vkcube ${D}${bindir}
 }
 
-FILES:${PN} = "\
+FILES_${PN} = "\
     ${bindir} \
     "
 

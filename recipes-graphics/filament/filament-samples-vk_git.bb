@@ -33,7 +33,7 @@ SRCREV = "${AUTOREV}"
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
 
@@ -56,7 +56,7 @@ EXTRA_OECMAKE += " \
     ${PACKAGECONFIG_CONFARGS} \
     "
 
-do_install:append() {
+do_install_append() {
     rm -rf ${D}${libdir}
     rm -rf ${D}${includedir}
 }

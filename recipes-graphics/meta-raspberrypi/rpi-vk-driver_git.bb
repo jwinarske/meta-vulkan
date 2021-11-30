@@ -30,7 +30,7 @@ S = "${WORKDIR}/git"
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 inherit cmake
 
@@ -40,9 +40,9 @@ EXTRA_OECMAKE += "\
     -D BUILD_TESTING=OFF \
     "
 
-FILES:${PN} = "${libdir}/librpi-vk-driver.so \
+FILES_${PN} = "${libdir}/librpi-vk-driver.so \
                ${datadir}/vulkan/icd.d/rpi-vk-driver.json \
               "
-FILES:${PN}-dev = "${bindir}/QPUassemblerExe"
+FILES_${PN}-dev = "${bindir}/QPUassemblerExe"
 
 BBCLASSEXTEND = ""

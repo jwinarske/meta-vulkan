@@ -31,7 +31,7 @@ S = "${WORKDIR}/git"
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 inherit features_check
 
@@ -47,6 +47,6 @@ do_install() {
 }
 
 
-FILES:${PN} = "${bindir}"
+FILES_${PN} = "${bindir}"
 
 BBCLASSEXTEND = ""

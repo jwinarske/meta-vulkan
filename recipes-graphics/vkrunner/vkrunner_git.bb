@@ -17,7 +17,7 @@ DEPENDS += "\
     vulkan-loader \
    "
 
-RDEPENDS:vkrunner += "\
+RDEPENDS_vkrunner += "\
     glslang \
    "
 
@@ -33,14 +33,14 @@ inherit cmake features_check
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
-do_install:append() {
+do_install_append() {
     install -d ${D}${datadir}/vkrunner/examples
     cp -r ${S}/examples/* ${D}${datadir}/vkrunner/examples/
 }
 
-FILES:${PN} += "\
+FILES_${PN} += "\
     $[datadir} \
     "
 

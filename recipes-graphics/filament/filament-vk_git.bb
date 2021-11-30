@@ -13,7 +13,7 @@ DEPENDS += "\
     libcxx \
     "
 
-DEPENDS:class-target += "\
+DEPENDS_class-target += "\
     filament-vk-native \
     vulkan-loader \
     "
@@ -29,8 +29,8 @@ S = "${WORKDIR}/git"
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-TOOLCHAIN:class-native = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+TOOLCHAIN_class-native = "clang"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
 
@@ -39,7 +39,7 @@ PACKAGECONFIG[x11] = "-DFILAMENT_SUPPORTS_X11=ON,-DFILAMENT_SUPPORTS_X11=OFF,lib
 
 inherit cmake pkgconfig
 
-EXTRA_OECMAKE:class-native += " \
+EXTRA_OECMAKE_class-native += " \
     -D BUILD_SHARED_LIBS=OFF \
     -D CMAKE_BUILD_TYPE=Release \
     -D FILAMENT_SUPPORTS_VULKAN=ON \
@@ -50,7 +50,7 @@ EXTRA_OECMAKE:class-native += " \
     ${PACKAGECONFIG_CONFARGS} \
     "
 
-EXTRA_OECMAKE:class-target += " \
+EXTRA_OECMAKE_class-target += " \
     -D BUILD_SHARED_LIBS=OFF \
     -D CMAKE_BUILD_TYPE=Release \
     -D FILAMENT_SUPPORTS_VULKAN=ON \
@@ -63,23 +63,23 @@ EXTRA_OECMAKE:class-target += " \
     ${PACKAGECONFIG_CONFARGS} \
     "
 
-do_configure:prepend:class-target () {
+do_configure_prepend_class-target () {
     cp ${WORKDIR}/ImportExecutables-Release.cmake ${S}
 }
 
-do_install:append:class-native () {
+do_install_append_class-native () {
     rm -rf ${D}${libdir}
     rm -rf ${D}${includedir}
 }
 
-do_install:append:class-target () {
+do_install_append_class-target () {
     mv ${D}${libdir}/*/*.a ${D}${libdir}
     rm -rf ${D}${libdir}/${BUILD_ARCH}
     rm ${D}/usr/LICENSE
     rm ${D}/usr/README.md
 }
 
-FILES:${PN}-staticdev += " \
+FILES_${PN}-staticdev += " \
     ${libdir} \
     "
 

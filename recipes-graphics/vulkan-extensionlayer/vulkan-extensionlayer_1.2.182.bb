@@ -27,14 +27,14 @@ inherit cmake
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
-PREFERRED_PROVIDER:libgomp = "openmp"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgomp = "openmp"
 
-FILES:${PN} = " \
+FILES_${PN} = " \
     ${libdir} \
     ${datadir} \
     "
 
-FILES:${PN}-dev = ""
+FILES_${PN}-dev = ""
 
 BBCLASSEXTEND = ""

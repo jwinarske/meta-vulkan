@@ -27,7 +27,7 @@ inherit cmake features_check
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 EXTRA_OECMAKE += "-D PERFDOC_TESTS=OFF"
 
@@ -37,10 +37,10 @@ do_install() {
     install -m 644 layer/VkLayer_mali_perf_doc.json ${D}${datadir}/vulkan
 }
 
-FILES:${PN} = " \
+FILES_${PN} = " \
     ${datadir} \
     "
 
-FILES:${PN}-dev = ""
+FILES_${PN}-dev = ""
 
 BBCLASSEXTEND = ""

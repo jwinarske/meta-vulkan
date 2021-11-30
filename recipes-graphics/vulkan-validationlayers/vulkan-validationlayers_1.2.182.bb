@@ -36,7 +36,7 @@ inherit cmake
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
 
@@ -54,11 +54,11 @@ EXTRA_OECMAKE += " \
     -D BUILD_WERROR=OFF \
     "
 
-FILES:${PN} = " \
+FILES_${PN} = " \
     ${libdir} \
     ${datadir} \
     "
 
-FILES:${PN}-dev = ""
+FILES_${PN}-dev = ""
 
 BBCLASSEXTEND = ""
