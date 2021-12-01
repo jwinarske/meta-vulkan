@@ -56,10 +56,10 @@ do_install () {
     install -d ${D}${libdir}
     cp ${WORKDIR}/build/Linux/libvk_swiftshader.so ${D}${libdir}
 
-    install -d ${D}${datadir}/vulkan
-    cp ${WORKDIR}/build/Linux/vk_swiftshader_icd.json ${D}${datadir}/vulkan
+    install -d ${D}${datadir}/vulkan/icd.d
+    cp ${WORKDIR}/build/Linux/vk_swiftshader_icd.json ${D}${datadir}/vulkan/icd.d
 
-    sed -i "s|./libvk_swiftshader.so|/usr/lib/libvk_swiftshader.so|g" ${D}${datadir}/vulkan/vk_swiftshader_icd.json
+    sed -i "s|./libvk_swiftshader.so|/usr/lib/libvk_swiftshader.so|g" ${D}${datadir}/vulkan/icd.d/vk_swiftshader_icd.json
 }
 
 FILES:${PN} = "\
