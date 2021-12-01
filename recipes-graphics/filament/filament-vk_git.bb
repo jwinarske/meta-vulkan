@@ -20,10 +20,10 @@ DEPENDS:class-target += "\
 
 PV .= "+${SRCPV}"
 
-SRC_URI = "git://github.com/meta-flutter/filament;protocol=https;branch=yocto \
+SRC_URI = "git://github.com/google/filament.git;protocol=https;branch=main \
            file://ImportExecutables-Release.cmake"
 
-SRCREV = "${AUTOREV}"
+SRCREV = "dbe1386785fe89141e451f0406eedafbb7687029"
 
 S = "${WORKDIR}/git"
 
