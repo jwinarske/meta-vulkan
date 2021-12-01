@@ -53,7 +53,6 @@ EXTRA_OECMAKE += " \
     -D FILAMENT_HOST_TOOLS_ROOT=${STAGING_BINDIR_NATIVE} \
     -D IMPORT_EXECUTABLES=${S}/cmake/ImportExecutables-Release.cmake \
     -D DIST_ARCH=${BUILD_ARCH} \
-    ${PACKAGECONFIG_CONFARGS} \
     "
 
 do_install:append() {
