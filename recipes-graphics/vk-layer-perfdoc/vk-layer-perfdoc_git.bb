@@ -42,6 +42,7 @@ do_install() {
 }
 
 FILES:${PN} = " \
+    ${libdir} \
     ${datadir} \
     "
 
