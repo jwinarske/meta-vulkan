@@ -10,9 +10,11 @@ LICENSE = "CLOSED"
 DEPENDS += "\
     compiler-rt \
     drm \
+    gbm \
+    gbm-headers \
     libcxx \
     libpng \
-    virtual/libgbm \
+    systemd \
     vulkan-loader \
    "
 
