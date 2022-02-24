@@ -26,7 +26,7 @@ EXTRA_OECMAKE = " \
 
 SOLIBSDEV = "glslang.so"
 # all the other libraries are unversioned, so pack it on PN
-FILES_${PN} += "${libdir}/*.so"
+FILES:${PN} += "${libdir}/*.so"
 
 BBCLASSEXTEND = "native nativesdk"
 

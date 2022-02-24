@@ -31,7 +31,7 @@ do_install:append:class-target() {
 
 # all the libraries are unversioned, so don't pack it on PN-dev
 SOLIBS = ".so"
-FILES_SOLIBSDEV = ""
+FILES:SOLIBSDEV = ""
 
 PACKAGES =+ "${PN}-lesspipe"
 FILES:${PN}-lesspipe = "${base_bindir}/spirv-lesspipe.sh"

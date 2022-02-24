@@ -27,8 +27,8 @@ DEPENDS += "\
 SRC_URI = "git://github.com/KhronosGroup/Vulkan-ValidationLayers.git;protocol=https;name=layers \
            git://github.com/martinus/robin-hood-hashing.git;protocol=https;destsuffix=git/robin-hood;name=robin_hood"
 
-SRCREV:layers = "v${PV}"
-SRCREV:robin_hood = "3.11.3"
+SRCREV_layers = "v${PV}"
+SRCREV_robin_hood = "3.11.3"
 
 S = "${WORKDIR}/git"
 
