@@ -1,0 +1,27 @@
+From 67208f19811b27aada7859d4d86a7977abba90ac Mon Sep 17 00:00:00 2001
+From: Joel Winarske <joel.winarske@gmail.com>
+Date: Thu, 24 Feb 2022 09:10:06 -0800
+Subject: [PATCH] vulkan.pc cross compile fix
+
+Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
+---
+ loader/vulkan.pc.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/loader/vulkan.pc.in b/loader/vulkan.pc.in
+index 44049ee..1538155 100644
+--- a/loader/vulkan.pc.in
++++ b/loader/vulkan.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+-exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=@CMAKE_INSTALL_FULL_LIBDIR_PC@
+-includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
++exec_prefix=${prefix}
++libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+ 
+ Name: @CMAKE_PROJECT_NAME@
+ Description: Vulkan Loader
+-- 
+2.31.1
