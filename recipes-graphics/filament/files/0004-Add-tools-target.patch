@@ -1,0 +1,27 @@
+From a2299617deb49b1c923c3e988217ccd068938b6f Mon Sep 17 00:00:00 2001
+From: Joel Winarske <joel.winarske@gmail.com>
+Date: Mon, 26 Sep 2022 07:56:36 -0700
+Subject: [PATCH] Add tools target
+
+Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
+---
+ CMakeLists.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a4b528297..8c6aed866 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -729,6 +729,9 @@ if (IS_HOST_PLATFORM)
+     add_subdirectory(${TOOLS}/roughness-prefilter)
+     add_subdirectory(${TOOLS}/specular-color)
+     add_subdirectory(${TOOLS}/uberz)
++    add_custom_target(tools DEPENDS
++        cmgen cso-lut filamesh glslminifier matc matinfo mipgen
++        normal-blending resgen rgb-to-lmsr roughness-prefilter uberz)
+ endif()
+ 
+ # Generate exported executables for cross-compiled builds (Android, WebGL, and iOS)
+-- 
+2.34.3
+

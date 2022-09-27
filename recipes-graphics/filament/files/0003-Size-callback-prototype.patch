@@ -1,0 +1,360 @@
+From 18ff8fff3596a0bb7b0ba3d15e40e0e06e366e17 Mon Sep 17 00:00:00 2001
+From: Joel Winarske <joel.winarske@gmail.com>
+Date: Sat, 24 Sep 2022 15:54:17 -0700
+Subject: [PATCH] Size callback prototype
+
+Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
+---
+ .../backend/include/private/backend/Driver.h  |  2 ++
+ .../include/private/backend/DriverAPI.inc     |  5 +++
+ filament/backend/src/vulkan/VulkanDriver.cpp  | 11 +++++++
+ filament/backend/src/vulkan/VulkanDriver.h    |  1 +
+ .../backend/src/vulkan/VulkanSwapChain.cpp    | 32 +++++++++++++++++++
+ filament/backend/src/vulkan/VulkanSwapChain.h |  4 +++
+ filament/include/filament/Engine.h            | 16 ++++++++++
+ filament/include/filament/SwapChain.h         |  6 ++++
+ filament/src/Engine.cpp                       |  5 +++
+ filament/src/details/Engine.cpp               | 16 ++++++++++
+ filament/src/details/Engine.h                 |  2 ++
+ filament/src/details/SwapChain.cpp            |  5 +++
+ filament/src/details/SwapChain.h              |  1 +
+ .../include/filamentapp/NativeWindowHelper.h  |  4 +++
+ libs/filamentapp/src/FilamentApp.cpp          |  5 ++-
+ .../src/NativeWindowHelperLinux.cpp           | 12 +++++++
+ 16 files changed, 126 insertions(+), 1 deletion(-)
+
+diff --git a/filament/backend/include/private/backend/Driver.h b/filament/backend/include/private/backend/Driver.h
+index 5c28841b1..ea9ab574b 100644
+--- a/filament/backend/include/private/backend/Driver.h
++++ b/filament/backend/include/private/backend/Driver.h
+@@ -53,6 +53,8 @@ class ConcreteDispatcher;
+ class Dispatcher;
+ class CommandStream;
+ 
++typedef void (*PFN_SwapChainExtentCallback)(uint32_t *width, uint32_t *height);
++
+ class Driver {
+ public:
+     virtual ~Driver() noexcept;
+diff --git a/filament/backend/include/private/backend/DriverAPI.inc b/filament/backend/include/private/backend/DriverAPI.inc
+index cbfb84e82..58e29fa7d 100644
+--- a/filament/backend/include/private/backend/DriverAPI.inc
++++ b/filament/backend/include/private/backend/DriverAPI.inc
+@@ -253,6 +253,11 @@ DECL_DRIVER_API_R_N(backend::SwapChainHandle, createSwapChainHeadless,
+         uint32_t, height,
+         uint64_t, flags)
+ 
++DECL_DRIVER_API_R_N(backend::SwapChainHandle, createSwapChainWithExtentCallback,
++        void*, nativeWindow,
++        PFN_SwapChainExtentCallback, extentCallback,
++        uint64_t, flags)
++
+ DECL_DRIVER_API_R_0(backend::TimerQueryHandle, createTimerQuery)
+ 
+ 
+diff --git a/filament/backend/src/vulkan/VulkanDriver.cpp b/filament/backend/src/vulkan/VulkanDriver.cpp
+index 3e2fceceb..076f145cd 100644
+--- a/filament/backend/src/vulkan/VulkanDriver.cpp
++++ b/filament/backend/src/vulkan/VulkanDriver.cpp
+@@ -641,6 +641,13 @@ void VulkanDriver::createSwapChainHeadlessR(Handle<HwSwapChain> sch,
+     construct<VulkanSwapChain>(sch, mContext, mStagePool, width, height);
+ }
+ 
++void VulkanDriver::createSwapChainWithExtentCallbackR(Handle<HwSwapChain> sch, void *nativeWindow,
++        PFN_SwapChainExtentCallback extentCallback, uint64_t flags) {
++    const VkInstance instance = mContext.instance;
++    auto vksurface = (VkSurfaceKHR) mContextManager.createVkSurfaceKHR(nativeWindow, instance, flags);
++    construct<VulkanSwapChain>(sch, mContext, mStagePool, extentCallback, vksurface);
++}
++
+ void VulkanDriver::createTimerQueryR(Handle<HwTimerQuery> tqh, int) {
+     // nothing to do, timer query was constructed in createTimerQueryS
+ }
+@@ -707,6 +714,10 @@ Handle<HwSwapChain> VulkanDriver::createSwapChainHeadlessS() noexcept {
+     return allocHandle<VulkanSwapChain>();
+ }
+ 
++Handle<HwSwapChain> VulkanDriver::createSwapChainWithExtentCallbackS() noexcept {
++    return allocHandle<VulkanSwapChain>();
++}
++
+ Handle<HwTimerQuery> VulkanDriver::createTimerQueryS() noexcept {
+     // The handle must be constructed here, as a synchronous call to getTimerQueryValue might happen
+     // before createTimerQueryR is executed.
+diff --git a/filament/backend/src/vulkan/VulkanDriver.h b/filament/backend/src/vulkan/VulkanDriver.h
+index 28e46dc1b..c4f148e52 100644
+--- a/filament/backend/src/vulkan/VulkanDriver.h
++++ b/filament/backend/src/vulkan/VulkanDriver.h
+@@ -153,6 +153,7 @@ private:
+     VulkanSamplerGroup* mSamplerBindings[VulkanPipelineCache::SAMPLER_BINDING_COUNT] = {};
+     VkDebugReportCallbackEXT mDebugCallback = VK_NULL_HANDLE;
+     VkDebugUtilsMessengerEXT mDebugMessenger = VK_NULL_HANDLE;
++    PFN_SwapChainExtentCallback mExtentCallback = nullptr;
+ };
+ 
+ } // namespace filament::backend
+diff --git a/filament/backend/src/vulkan/VulkanSwapChain.cpp b/filament/backend/src/vulkan/VulkanSwapChain.cpp
+index aa8ff76f3..880422f0c 100644
+--- a/filament/backend/src/vulkan/VulkanSwapChain.cpp
++++ b/filament/backend/src/vulkan/VulkanSwapChain.cpp
+@@ -129,6 +129,27 @@ void VulkanSwapChain::create(VulkanStagePool& stagePool) {
+     // Create the low-level swap chain.
+ 
+     clientSize = caps.currentExtent;
++    if (clientSize.width == UINT32_MAX) {
++        uint32_t width = 0;
++        uint32_t height = 0;
++        if (mExtentCallback) {
++            mExtentCallback(&width, &height);
++        }
++        ASSERT_POSTCONDITION(width, "Buffer width not set.");
++        ASSERT_POSTCONDITION(height, "Buffer height not set.");
++        VkExtent2D actual_extent = {
++                .width = width,
++                .height = height,
++        };
++        clientSize.width =
++                std::max(caps.minImageExtent.width,
++                         std::min(caps.maxImageExtent.width,
++                                  actual_extent.width));
++        clientSize.height =
++                std::max(caps.minImageExtent.height,
++                         std::min(caps.maxImageExtent.height,
++                                  actual_extent.height));
++    }
+ 
+     const VkCompositeAlphaFlagBitsKHR compositeAlpha = (caps.supportedCompositeAlpha & VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR) ?
+             VK_COMPOSITE_ALPHA_INHERIT_BIT_KHR : VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+@@ -306,6 +327,17 @@ VulkanSwapChain::VulkanSwapChain(VulkanContext& context, VulkanStagePool& stageP
+     create(stagePool);
+ }
+ 
++// Primary SwapChain constructor. (not headless)
++VulkanSwapChain::VulkanSwapChain(VulkanContext &context, VulkanStagePool &stagePool,
++                                 PFN_SwapChainExtentCallback extentCallback, VkSurfaceKHR vksurface) :
++        mContext(context), mExtentCallback(extentCallback) {
++    suboptimal = false;
++    surface = vksurface;
++    firstRenderPass = true;
++    getPresentationQueue(context, *this);
++    create(stagePool);
++}
++
+ // Headless SwapChain constructor. (does not create a VkSwapChainKHR)
+ VulkanSwapChain::VulkanSwapChain(VulkanContext& context, VulkanStagePool& stagePool, uint32_t width, uint32_t height) :
+         mContext(context) {
+diff --git a/filament/backend/src/vulkan/VulkanSwapChain.h b/filament/backend/src/vulkan/VulkanSwapChain.h
+index c1b880adc..884020c09 100644
+--- a/filament/backend/src/vulkan/VulkanSwapChain.h
++++ b/filament/backend/src/vulkan/VulkanSwapChain.h
+@@ -33,6 +33,9 @@ struct VulkanSwapChain : public HwSwapChain {
+     // Headless constructor.
+     VulkanSwapChain(VulkanContext& context, VulkanStagePool& stagePool, uint32_t width, uint32_t height);
+ 
++    VulkanSwapChain(VulkanContext &context, VulkanStagePool &stagePool, PFN_SwapChainExtentCallback extentCallback,
++                    VkSurfaceKHR vksurface);
++
+     bool acquire();
+     void create(VulkanStagePool& stagePool);
+     void destroy();
+@@ -63,6 +66,7 @@ struct VulkanSwapChain : public HwSwapChain {
+ private:
+     VulkanContext& mContext;
+     uint32_t mCurrentSwapIndex = 0u;
++    PFN_SwapChainExtentCallback mExtentCallback = nullptr;
+ 
+     // Color attachments are swapped, but depth is not. Typically there are 2 or 3 color attachments
+     // in a swap chain.
+diff --git a/filament/include/filament/Engine.h b/filament/include/filament/Engine.h
+index 7452c4d5c..cfeaf53a5 100644
+--- a/filament/include/filament/Engine.h
++++ b/filament/include/filament/Engine.h
+@@ -543,6 +543,22 @@ public:
+      */
+     SwapChain* createSwapChain(uint32_t width, uint32_t height, uint64_t flags = 0) noexcept;
+ 
++    typedef void (*SwapChainExtentVoidCallback)(uint32_t *, uint32_t *);
++
++    /**
++     * Creates a SwapChain from the given Operating System's native window handle.
++     *
++     * @param nativeWindow An opaque native window handle. e.g.: on Android this is an
++     *                     `ANativeWindow*`.
++     * @param callback Function pointer to callback that returns the frame buffer size.
++     * @param flags One or more configuration flags as defined in `SwapChain`.
++     *
++     * @return A pointer to the newly created SwapChain or nullptr if it couldn't be created.
++     *
++     * @see Renderer.beginFrame()
++     */
++    SwapChain* createSwapChain(void* nativeWindow, SwapChainExtentVoidCallback extentCallback, uint64_t flags = 0) noexcept;
++
+     /**
+      * Creates a renderer associated to this engine.
+      *
+diff --git a/filament/include/filament/SwapChain.h b/filament/include/filament/SwapChain.h
+index 248476075..11607b396 100644
+--- a/filament/include/filament/SwapChain.h
++++ b/filament/include/filament/SwapChain.h
+@@ -148,6 +148,12 @@ public:
+     using FrameScheduledCallback = backend::FrameScheduledCallback;
+     using FrameCompletedCallback = backend::FrameCompletedCallback;
+ 
++    /**
++     * This defines a SwapChain Extent callback function pointer type.
++     *
++     */
++    typedef void (*PFN_SwapChainExtentCallback)(uint32_t *width, uint32_t *height);
++
+     static const uint64_t CONFIG_TRANSPARENT = backend::SWAP_CHAIN_CONFIG_TRANSPARENT;
+     /**
+      * This flag indicates that the swap chain may be used as a source surface
+diff --git a/filament/src/Engine.cpp b/filament/src/Engine.cpp
+index b507b176f..30330bd6e 100644
+--- a/filament/src/Engine.cpp
++++ b/filament/src/Engine.cpp
+@@ -125,6 +125,11 @@ SwapChain* Engine::createSwapChain(uint32_t width, uint32_t height, uint64_t fla
+     return upcast(this)->createSwapChain(width, height, flags);
+ }
+ 
++SwapChain *
++Engine::createSwapChain(void *nativeWindow, SwapChainExtentVoidCallback extentCallback, uint64_t flags) noexcept {
++    return upcast(this)->createSwapChain(nativeWindow, extentCallback, flags);
++}
++
+ bool Engine::destroy(const BufferObject* p) {
+     return upcast(this)->destroy(upcast(p));
+ }
+diff --git a/filament/src/details/Engine.cpp b/filament/src/details/Engine.cpp
+index 9e65b79de..6d5d31923 100644
+--- a/filament/src/details/Engine.cpp
++++ b/filament/src/details/Engine.cpp
+@@ -803,6 +803,22 @@ FSwapChain* FEngine::createSwapChain(uint32_t width, uint32_t height, uint64_t f
+     return p;
+ }
+ 
++FSwapChain *
++FEngine::createSwapChain(void *nativeWindow, SwapChainExtentVoidCallback extentCallback, uint64_t flags) noexcept {
++    if (UTILS_UNLIKELY(flags & backend::SWAP_CHAIN_CONFIG_APPLE_CVPIXELBUFFER)) {
++        // If this flag is set, then the nativeWindow is a CVPixelBufferRef.
++        // The call to setupExternalImage is synchronous, and allows the driver to take ownership of
++        // the buffer on this thread.
++        // For non-Metal backends, this is a no-op.
++        getDriverApi().setupExternalImage(nativeWindow);
++    }
++    FSwapChain *p = mHeapAllocator.make<FSwapChain>(*this, nativeWindow, extentCallback, flags);
++    if (p) {
++        mSwapChains.insert(p);
++    }
++    return p;
++}
++
+ /*
+  * Objects created with a component manager
+  */
+diff --git a/filament/src/details/Engine.h b/filament/src/details/Engine.h
+index db663d892..b1854979f 100644
+--- a/filament/src/details/Engine.h
++++ b/filament/src/details/Engine.h
+@@ -267,6 +267,8 @@ public:
+     FFence* createFence(FFence::Type type) noexcept;
+     FSwapChain* createSwapChain(void* nativeWindow, uint64_t flags) noexcept;
+     FSwapChain* createSwapChain(uint32_t width, uint32_t height, uint64_t flags) noexcept;
++    FSwapChain *
++    createSwapChain(void *nativeWindow, SwapChainExtentVoidCallback extentCallback, uint64_t flags) noexcept;
+ 
+     FCamera* createCamera(utils::Entity entity) noexcept;
+     FCamera* getCameraComponent(utils::Entity entity) noexcept;
+diff --git a/filament/src/details/SwapChain.cpp b/filament/src/details/SwapChain.cpp
+index 07d61a058..dece1fbb5 100644
+--- a/filament/src/details/SwapChain.cpp
++++ b/filament/src/details/SwapChain.cpp
+@@ -30,6 +30,11 @@ FSwapChain::FSwapChain(FEngine& engine, uint32_t width, uint32_t height, uint64_
+     mSwapChain = engine.getDriverApi().createSwapChainHeadless(width, height, flags);
+ }
+ 
++FSwapChain::FSwapChain(FEngine& engine, void* nativeWindow, PFN_SwapChainExtentCallback extentCallback, uint64_t flags)
++        : mEngine(engine), mNativeWindow(nativeWindow), mConfigFlags(flags) {
++    mSwapChain = engine.getDriverApi().createSwapChainWithExtentCallback(nativeWindow, extentCallback, flags);
++}
++
+ void FSwapChain::terminate(FEngine& engine) noexcept {
+     engine.getDriverApi().destroySwapChain(mSwapChain);
+ }
+diff --git a/filament/src/details/SwapChain.h b/filament/src/details/SwapChain.h
+index 09bad013d..2332febc0 100644
+--- a/filament/src/details/SwapChain.h
++++ b/filament/src/details/SwapChain.h
+@@ -32,6 +32,7 @@ class FEngine;
+ class FSwapChain : public SwapChain {
+ public:
+     FSwapChain(FEngine& engine, void* nativeWindow, uint64_t flags);
++    FSwapChain(FEngine& engine, void* nativeWindow, PFN_SwapChainExtentCallback extentCallback, uint64_t flags);
+     FSwapChain(FEngine& engine, uint32_t width, uint32_t height, uint64_t flags);
+     void terminate(FEngine& engine) noexcept;
+ 
+diff --git a/libs/filamentapp/include/filamentapp/NativeWindowHelper.h b/libs/filamentapp/include/filamentapp/NativeWindowHelper.h
+index 027c1a0be..24c4d50b4 100644
+--- a/libs/filamentapp/include/filamentapp/NativeWindowHelper.h
++++ b/libs/filamentapp/include/filamentapp/NativeWindowHelper.h
+@@ -17,10 +17,14 @@
+ #ifndef TNT_FILAMENT_NATIVE_WINDOW_HELPER_H
+ #define TNT_FILAMENT_NATIVE_WINDOW_HELPER_H
+ 
++#include <cstdint>
++
+ struct SDL_Window;
+ 
+ extern "C" void* getNativeWindow(SDL_Window* sdlWindow);
+ 
++extern "C" void getNativeDrawableSize(SDL_Window* sdlWindow, std::uint32_t *width, std::uint32_t *height);
++
+ #if defined(__APPLE__)
+ // Add a backing CAMetalLayer to the NSView and return the layer.
+ extern "C" void* setUpMetalLayer(void* nativeWindow);
+diff --git a/libs/filamentapp/src/FilamentApp.cpp b/libs/filamentapp/src/FilamentApp.cpp
+index 259de73d4..6d240ce08 100644
+--- a/libs/filamentapp/src/FilamentApp.cpp
++++ b/libs/filamentapp/src/FilamentApp.cpp
+@@ -581,7 +581,10 @@ FilamentApp::Window::Window(FilamentApp* filamentApp,
+                 mFilamentApp->mEngine->getSupportedFeatureLevel());
+         mFilamentApp->mEngine->setActiveFeatureLevel(config.featureLevel);
+ 
+-        mSwapChain = mFilamentApp->mEngine->createSwapChain(nativeSwapChain);
++        static SDL_Window *pWindow = mWindow;
++        mSwapChain = mFilamentApp->mEngine->createSwapChain(nativeSwapChain, [](uint32_t *width, uint32_t *height) {
++            ::getNativeDrawableSize(pWindow, width, height);
++        });
+     }
+     mRenderer = mFilamentApp->mEngine->createRenderer();
+ 
+diff --git a/libs/filamentapp/src/NativeWindowHelperLinux.cpp b/libs/filamentapp/src/NativeWindowHelperLinux.cpp
+index 78e737d0a..19c26adc7 100644
+--- a/libs/filamentapp/src/NativeWindowHelperLinux.cpp
++++ b/libs/filamentapp/src/NativeWindowHelperLinux.cpp
+@@ -19,6 +19,7 @@
+ #include <utils/Panic.h>
+ 
+ #include <SDL_syswm.h>
++#include <SDL_vulkan.h>
+ 
+ void* getNativeWindow(SDL_Window* sdlWindow) {
+     SDL_SysWMinfo wmi;
+@@ -44,3 +45,14 @@ void* getNativeWindow(SDL_Window* sdlWindow) {
+     }
+     return nullptr;
+ }
++
++void getNativeDrawableSize(SDL_Window* sdlWindow, uint32_t *width, uint32_t *height) {
++    int w, h;
++#if defined(FILAMENT_DRIVER_SUPPORTS_VULKAN)
++    SDL_Vulkan_GetDrawableSize(sdlWindow, &w, &h);
++#elif defined(FILAMENT_DRIVER_SUPPORTS_OPENGL)
++    SDL_GL_GetDrawableSize(sdlWindow, &w, &h);
++#endif
++    *width = w;
++    *height = w;
++}
+-- 
+2.34.3
+

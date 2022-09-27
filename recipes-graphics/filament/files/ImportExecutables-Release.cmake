@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget matc cmgen filamesh mipgen resgen glslminifier)
+foreach(_expectedTarget matc cmgen filamesh mipgen resgen uberz glslminifier)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -56,6 +56,9 @@ add_executable(mipgen IMPORTED)
 # Create imported target resgen
 add_executable(resgen IMPORTED)
 
+# Create imported target uberz
+add_executable(uberz IMPORTED)
+
 # Create imported target glslminifier
 add_executable(glslminifier IMPORTED)
 
@@ -89,7 +92,13 @@ set_target_properties(resgen PROPERTIES
   IMPORTED_LOCATION_RELEASE "${FILAMENT_HOST_TOOLS_ROOT}/resgen"
   )
 
-# Import target "glslminifier" for configuration "Release"
+# Import target "uberz" for configuration "Release"
+set_property(TARGET uberz APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(uberz PROPERTIES
+  IMPORTED_LOCATION_RELEASE "${FILAMENT_HOST_TOOLS_ROOT}/uberz"
+  )
+
+  # Import target "glslminifier" for configuration "Release"
 set_property(TARGET glslminifier APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(glslminifier PROPERTIES
   IMPORTED_LOCATION_RELEASE "${FILAMENT_HOST_TOOLS_ROOT}/glslminifier"

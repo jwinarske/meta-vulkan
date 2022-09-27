@@ -1,0 +1,30 @@
+From b901a593f4bc931afbc112b16d814432b2c3d1ff Mon Sep 17 00:00:00 2001
+From: Joel Winarske <joel.winarske@gmail.com>
+Date: Fri, 23 Sep 2022 11:38:43 -0700
+Subject: [PATCH 3/3] Remove unused code
+
+Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
+---
+ libs/filamentapp/src/FilamentApp.cpp | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/libs/filamentapp/src/FilamentApp.cpp b/libs/filamentapp/src/FilamentApp.cpp
+index d7f094325..259de73d4 100644
+--- a/libs/filamentapp/src/FilamentApp.cpp
++++ b/libs/filamentapp/src/FilamentApp.cpp
+@@ -18,11 +18,7 @@
+ 
+ #include <filamentapp/FilamentApp.h>
+ 
+-#if !defined(WIN32)
+-#if defined(FILAMENT_SUPPORTS_WAYLAND)
+-#    include <SDL_syswm.h>
+-#endif
+-#else
++#if defined(WIN32)
+ #    include <SDL_syswm.h>
+ #    include <utils/unwindows.h>
+ #endif
+-- 
+2.34.3
+

@@ -1,0 +1,76 @@
+From 0512ee3bb4c94733e658f90779ba6612aeeb7a24 Mon Sep 17 00:00:00 2001
+From: Joel Winarske <joel.winarske@gmail.com>
+Date: Thu, 22 Sep 2022 16:31:53 -0700
+Subject: [PATCH 2/3] Wayland FilamentApp
+
+-move Wayland specific code into getNativeWindow
+-make wayland struct static
+
+Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
+---
+ libs/filamentapp/src/FilamentApp.cpp          | 22 +------------------
+ .../src/NativeWindowHelperLinux.cpp           |  9 +++++++-
+ 2 files changed, 9 insertions(+), 22 deletions(-)
+
+diff --git a/libs/filamentapp/src/FilamentApp.cpp b/libs/filamentapp/src/FilamentApp.cpp
+index d531b9c01..d7f094325 100644
+--- a/libs/filamentapp/src/FilamentApp.cpp
++++ b/libs/filamentapp/src/FilamentApp.cpp
+@@ -549,33 +549,13 @@ FilamentApp::Window::Window(FilamentApp* filamentApp,
+         mHeight = h;
+     } else {
+ 
+-#if defined(FILAMENT_SUPPORTS_WAYLAND)
+-        struct {
+-            struct wl_display *display;
+-            struct wl_surface *surface;
+-        } wayland{};
+-
+-        SDL_SysWMinfo wmi;
+-        SDL_VERSION(&wmi.version);
+-        ASSERT_POSTCONDITION(SDL_GetWindowWMInfo(mWindow, &wmi), "SDL version unsupported!");
+-        if (wmi.subsystem == SDL_SYSWM_WAYLAND) {
+-            wayland.display = wmi.info.wl.display;
+-            wayland.surface = wmi.info.wl.surface;
+-        }
+-        void* nativeWindow = &wayland;
+-
+-        // Create the Engine after the window in case this happens to be a single-threaded platform.
+-        // For single-threaded platforms, we need to ensure that Filament's OpenGL context is
+-        // current, rather than the one created by SDL.
+-        mFilamentApp->mEngine = Engine::create(config.backend, nullptr, nativeWindow);
+-#else
+         void* nativeWindow = ::getNativeWindow(mWindow);
+ 
+         // Create the Engine after the window in case this happens to be a single-threaded platform.
+         // For single-threaded platforms, we need to ensure that Filament's OpenGL context is
+         // current, rather than the one created by SDL.
+         mFilamentApp->mEngine = Engine::create(config.backend);
+-#endif
++
+         // get the resolved backend
+         mBackend = config.backend = mFilamentApp->mEngine->getBackend();
+ 
+diff --git a/libs/filamentapp/src/NativeWindowHelperLinux.cpp b/libs/filamentapp/src/NativeWindowHelperLinux.cpp
+index d37be6bd6..78e737d0a 100644
+--- a/libs/filamentapp/src/NativeWindowHelperLinux.cpp
++++ b/libs/filamentapp/src/NativeWindowHelperLinux.cpp
+@@ -32,7 +32,14 @@ void* getNativeWindow(SDL_Window* sdlWindow) {
+     }
+     else if (wmi.subsystem == SDL_SYSWM_WAYLAND) {
+ #if defined(FILAMENT_SUPPORTS_WAYLAND)
+-        return wmi.info.wl.display;
++        static struct {
++            struct wl_display *display;
++            struct wl_surface *surface;
++        } wayland {
++            wmi.info.wl.display,
++            wmi.info.wl.surface,
++        };
++        return (void *) &wayland;
+ #endif
+     }
+     return nullptr;
+-- 
+2.34.3
+

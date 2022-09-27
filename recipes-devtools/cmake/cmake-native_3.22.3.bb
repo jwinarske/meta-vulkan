@@ -9,6 +9,14 @@ SRC_URI += "file://OEToolchainConfig.cmake \
             file://0005-Disable-use-of-ext2fs-ext2_fs.h-by-cmake-s-internal-.patch \
             "
 
+LICENSE_append = " & BSD-1-Clause & MIT & BSD-2-Clause"
+LIC_FILES_CHKSUM_append = " \
+    file://Utilities/cmjsoncpp/LICENSE;md5=fa2a23dd1dc6c139f35105379d76df2b \
+    file://Utilities/cmlibarchive/COPYING;md5=d499814247adaee08d88080841cb5665 \
+    file://Utilities/cmexpat/COPYING;md5=9e2ce3b3c4c0f2670883a23bbd7c37a9 \
+    file://Utilities/cmlibrhash/COPYING;md5=a8c2a557a5c53b1c12cddbee98c099af \
+    file://Utilities/cmlibuv/LICENSE;md5=a68902a430e32200263d182d44924d47 \
+"
 
 B = "${WORKDIR}/build"
 do_configure[cleandirs] = "${B}"
@@ -46,6 +54,9 @@ do_install() {
 	install -m 644 ${WORKDIR}/OEToolchainConfig.cmake ${D}${datadir}/cmake/
 	mkdir -p ${D}${base_prefix}/environment-setup.d
 	install -m 644 ${WORKDIR}/environment.d-cmake.sh ${D}${base_prefix}/environment-setup.d/cmake.sh
+
+	# Help docs create tons of files in the native sysroot and aren't needed there
+	rm -rf ${D}${datadir}/cmake-*/Help
 }
 
 do_compile[progress] = "percent"
