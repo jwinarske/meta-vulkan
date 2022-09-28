@@ -21,8 +21,6 @@ DEPENDS_class-target += "\
     virtual/egl \
     "
 
-REQUIRED_DISTRO_FEATURES = "opengl"
-
 PV .= "+${SRCPV}"
 
 SRC_URI = "git://github.com/google/filament;protocol=https;branch=release \
@@ -66,7 +64,7 @@ PACKAGECONFIG[samples] = "\
     -DFILAMENT_SKIP_SAMPLES=OFF -DFILAMENT_SKIP_SDL2=OFF, \
     -DFILAMENT_SKIP_SAMPLES=ON  -DFILAMENT_SKIP_SDL2=ON"
 
-inherit cmake pkgconfig features_check
+inherit cmake pkgconfig
 
 EXTRA_OECMAKE_BUILD_class-native = "tools"
 
