@@ -30,7 +30,7 @@ S = "${WORKDIR}/git"
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
 TOOLCHAIN:class-native = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
 
