@@ -20,7 +20,7 @@ REQUIRED_DISTRO_FEATURES = "vulkan"
 
 SRCREV_FORMAT="sasha-samples"
 
-SRC_URI = "git://github.com/SaschaWillems/Vulkan.git;protocol=https;name=samples \
+SRC_URI = "gitsm://github.com/SaschaWillems/Vulkan.git;protocol=https;name=samples \
            git://github.com/SaschaWillems/Vulkan-Assets.git;protocol=https;name=assets;destsuffix=assets"
 
 SRCREV_samples = "79d0c5e436623436b6297a8c81fb3ee8ff78d804"
