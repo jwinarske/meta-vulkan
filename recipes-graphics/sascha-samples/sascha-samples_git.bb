@@ -28,7 +28,7 @@ SRCREV_assets = "70847d249cbb3e3996d873592363b934ebacb0e0"
 
 S = "${WORKDIR}/git"
 
-inherit cmake features_check
+inherit cmake features_check pkgconfig
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
