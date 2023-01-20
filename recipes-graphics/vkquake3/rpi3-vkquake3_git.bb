@@ -33,7 +33,7 @@ inherit cmake features_check
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 EXTRA_OECMAKE += "\
     -D ARCH_STRING=${TARGET_ARCH} \

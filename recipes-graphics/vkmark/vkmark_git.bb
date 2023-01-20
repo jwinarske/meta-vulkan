@@ -29,7 +29,7 @@ inherit meson pkgconfig features_check
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland xcb', d)}"
 
@@ -58,12 +58,6 @@ do_install() {
     rm -rf ${D}${datadir}/man
 }
 
-FILES:${PN} += "\
-    ${bindir} \
-    ${libdir} \
-    ${datadir} \
-    "
-
-FILES:${PN}-dev = ""
+FILES:${PN} += "${datadir}"
 
 BBCLASSEXTEND = ""

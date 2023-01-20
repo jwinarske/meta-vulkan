@@ -33,7 +33,7 @@ inherit cmake features_check
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 do_install:append() {
     install -d ${D}${datadir}/vkrunner/examples

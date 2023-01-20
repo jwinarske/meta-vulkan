@@ -14,14 +14,13 @@ DEPENDS += "\
     compiler-rt \
     libcxx \
     libdrm \
-    vulkan-headers \
    "
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
 
 SRC_URI = "git://swiftshader.googlesource.com/SwiftShader;protocol=https"
 
-SRCREV = "533f38d43254240286b3abf89d99ec5734027dab"
+SRCREV = "aae98adc2222dcada4aa952cccad48ab08e34004"
 
 S = "${WORKDIR}/git"
 
@@ -29,18 +28,21 @@ inherit cmake features_check
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
-PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
+PACKAGECONFIG ??= "\
+    ${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'vulkan', 'vulkan', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'gles2', d)} \
+"
 
 PACKAGECONFIG[wayland] = "-DSWIFTSHADER_BUILD_WSI_WAYLAND=ON,-DSWIFTSHADER_BUILD_WSI_WAYLAND=OFF,wayland wayland-native wayland-protocols"
 PACKAGECONFIG[x11] = ",,libxcb libx11 libxrandr"
+PACKAGECONFIG[vulkan] = "-DSWIFTSHADER_BUILD_VULKAN=ON,,vulkan-headers"
+PACKAGECONFIG[gles2] = "-DSWIFTSHADER_BUILD_EGL=ON -DSWIFTSHADER_BUILD_GLESv2=ON,,virtual/egl"
 
 # SWIFTSHADER_WARNINGS_AS_ERRORS=OFF for clang 13
 EXTRA_OECMAKE += " \
-    -D SWIFTSHADER_BUILD_EGL=OFF \
-    -D SWIFTSHADER_BUILD_GLESv2=OFF \
-    -D SWIFTSHADER_BUILD_VULKAN=TRUE \
     -D SWIFTSHADER_BUILD_WSI_D2D=ON \
     -D SWIFTSHADER_BUILD_PVR=FALSE \
     -D SWIFTSHADER_GET_PVR=FALSE \
@@ -62,11 +64,6 @@ do_install () {
     sed -i "s|./libvk_swiftshader.so|/usr/lib/libvk_swiftshader.so|g" ${D}${datadir}/vulkan/icd.d/vk_swiftshader_icd.json
 }
 
-FILES:${PN} = "\
-    ${libdir} \
-    ${datadir} \
-    "
-
-FILES:${PN}-dev = ""
+FILES:${PN} += "${datadir}"
 
 BBCLASSEXTEND = ""

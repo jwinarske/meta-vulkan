@@ -20,10 +20,10 @@ REQUIRED_DISTRO_FEATURES = "vulkan"
 
 SRCREV_FORMAT="sasha-samples"
 
-SRC_URI = "gitsm://github.com/SaschaWillems/Vulkan.git;name=samples \
-           git://github.com/SaschaWillems/Vulkan-Assets.git;name=assets;destsuffix=assets"
+SRC_URI = "git://github.com/SaschaWillems/Vulkan.git;protocol=https;name=samples \
+           git://github.com/SaschaWillems/Vulkan-Assets.git;protocol=https;name=assets;destsuffix=assets"
 
-SRCREV_samples = "e79634e4da0a0bdcefa92b93d70350f784d9e40d"
+SRCREV_samples = "79d0c5e436623436b6297a8c81fb3ee8ff78d804"
 SRCREV_assets = "70847d249cbb3e3996d873592363b934ebacb0e0"
 
 S = "${WORKDIR}/git"
@@ -32,8 +32,8 @@ inherit cmake features_check pkgconfig
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
-PREFERRED_PROVIDER:libgomp = "openmp"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgomp = "openmp"
 
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
 
@@ -47,14 +47,11 @@ EXTRA_OECMAKE += " \
     -DCMAKE_INSTALL_BINDIR=${bindir}/vulkan-samples \
     "
 
-FILES:${PN} = "\
-    ${bindir}/vulkan-samples* \
-    ${datadir}/vulkan-samples/assets \
-    "
-
 do_configure:prepend () {
     cp -r ${WORKDIR}/assets/* ${S}/data/
     rm -rf ${WORKDIR}/assets
 }
+
+FILES:${PN} += "${datadir}"
 
 BBCLASSEXTEND = ""

@@ -23,15 +23,18 @@ DEPENDS += "\
 
 REQUIRED_DISTRO_FEATURES = "vulkan x11"
 
-SRC_URI = "git://github.com/jwinarske/vkQuake.git;protocol=https;branch=yocto"
+SRC_URI = "\
+    git://github.com/Novum/vkQuake.git;protocol=https;branch=master \
+    file://0001-Remove-strip-step.patch \
+"
 
-SRCREV = "${AUTOREV}"
+SRCREV = "d90ec36da4d9fb58a60ac520fe5878ee7cc9b85e"
 
 S = "${WORKDIR}/git"
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
-PREFERRED_PROVIDER:libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 inherit features_check
 
@@ -45,8 +48,5 @@ do_install() {
     install -d ${D}${bindir}
     oe_runmake install DESTDIR=${D}
 }
-
-
-FILES:${PN} = "${bindir}"
 
 BBCLASSEXTEND = ""
