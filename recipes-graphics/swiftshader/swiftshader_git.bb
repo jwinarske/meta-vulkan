@@ -33,7 +33,7 @@ PREFERRED_PROVIDER_libgcc = "compiler-rt"
 PACKAGECONFIG ??= "\
     ${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)} \
     ${@bb.utils.contains('DISTRO_FEATURES', 'vulkan', 'vulkan', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'gles2', d)} \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'virtual/gles2', d)} \
 "
 
 PACKAGECONFIG[wayland] = "-DSWIFTSHADER_BUILD_WSI_WAYLAND=ON,-DSWIFTSHADER_BUILD_WSI_WAYLAND=OFF,wayland wayland-native wayland-protocols"
