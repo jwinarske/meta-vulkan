@@ -11,8 +11,6 @@ LICENSE = "CLOSED"
 LIC_FILES_CHKSUM = "file://COPYING;md5=2327139e51b79a3abbfec6568e92ecc5"
 
 DEPENDS += "\
-    compiler-rt \
-    libcxx \
     vulkan-headers \
     vulkan-loader \
    "
@@ -30,10 +28,6 @@ SRCREV = "810bfc5108cd002513e2578c23543329cc8ae5f5"
 S = "${WORKDIR}/git"
 
 inherit cmake features_check
-
-RUNTIME = "llvm"
-TOOLCHAIN = "clang"
-PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 do_install:append() {
     install -d ${D}${datadir}/vkrunner/examples

@@ -11,9 +11,7 @@ LIC_FILES_CHKSUM = "\
 "
 
 DEPENDS += "\
-    compiler-rt \
     drm \
-    libcxx \
     libpng \
     virtual/libgbm \
     vulkan-loader \
@@ -26,10 +24,6 @@ SRC_URI = "git://github.com/krh/vkcube.git;protocol=https;branch=master"
 SRCREV = "f77395324a3297b2b6ffd7bce0383073e4670190"
 
 S = "${WORKDIR}/git"
-
-RUNTIME = "llvm"
-TOOLCHAIN = "clang"
-PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 inherit meson pkgconfig features_check
 

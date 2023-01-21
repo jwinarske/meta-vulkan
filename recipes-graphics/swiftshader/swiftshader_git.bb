@@ -53,12 +53,19 @@ EXTRA_OECMAKE += " \
 do_install () {
 
     install -Dm 644 ${WORKDIR}/build/Linux/libvk_swiftshader.so \
-        ${D}${datadir}/vulkan/icd.d/libvk_swiftshader.so
+        ${D}${libdir}/libvk_swiftshader.so
 
     install -Dm 644 ${WORKDIR}/build/Linux/vk_swiftshader_icd.json \
-        ${D}${datadir}/vulkan/icd.d/vk_swiftshader_icd.json
+        ${D}${datadir}/vulkan/vk_swiftshader_icd.json
+
+    sed -i "s|./libvk_swiftshader.so|/usr/lib/libvk_swiftshader.so|g" ${D}${datadir}/vulkan/vk_swiftshader_icd.json
 }
 
-FILES:${PN} += "${datadir}"
+FILES:${PN} += "\
+    ${libdir} \
+    ${datadir} \
+"
+
+FILES:${PN}-dev = ""
 
 BBCLASSEXTEND = ""

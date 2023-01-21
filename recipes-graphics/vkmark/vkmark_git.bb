@@ -10,9 +10,7 @@ LIC_FILES_CHKSUM = "file://COPYING-LGPL2.1;md5=4fbd65380cdd255951079008b364516c"
 
 DEPENDS += "\
     assimp \
-    compiler-rt \
     glm \
-    libcxx \
     vulkan-headers \
     vulkan-loader \
    "
@@ -30,17 +28,13 @@ SRC_URI = "\
 
 inherit meson features_check pkgconfig
 
-RUNTIME = "llvm"
-TOOLCHAIN = "clang"
-PREFERRED_PROVIDER_libgcc = "compiler-rt"
-
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland xcb', d)}"
 
 PACKAGECONFIG[kms] = "-Dkms=true,-Dkms=false,drm virtual/libgbm"
 PACKAGECONFIG[wayland] = "-Dwayland=true,-Dwayland=false,wayland wayland-native wayland-protocols"
 PACKAGECONFIG[xcb] = "-Dxcb=true,-Dxcb=false,virtual/libx11 libxcb"
 
-EXTRA_OEMESON += "--prefix ${STAGING_DIR_TARGET}/usr"
+EXTRA_OEMESON += "--buildtype release --prefix ${STAGING_DIR_TARGET}/usr"
 
 do_install() {
     install -d ${D}${datadir}/vkmark/models
