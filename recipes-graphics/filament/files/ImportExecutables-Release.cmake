@@ -59,6 +59,8 @@ add_executable(resgen IMPORTED)
 # Create imported target glslminifier
 add_executable(glslminifier IMPORTED)
 
+add_executable(uberz IMPORTED)
+
 # Import target "matc" for configuration "Release"
 set_property(TARGET matc APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
 set_target_properties(matc PROPERTIES
@@ -95,7 +97,13 @@ set_target_properties(glslminifier PROPERTIES
   IMPORTED_LOCATION_RELEASE "${FILAMENT_HOST_TOOLS_ROOT}/glslminifier"
   )
 
-# This file does not depend on other imported targets which have
+# Import target "uberz" for configuration "Release"
+set_property(TARGET uberz APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+set_target_properties(uberz PROPERTIES
+  IMPORTED_LOCATION_RELEASE "${FILAMENT_HOST_TOOLS_ROOT}/uberz"
+  )
+
+  # This file does not depend on other imported targets which have
 # been exported from the same project but in a separate export set.
 
 # Commands beyond this point should not need to know the version.

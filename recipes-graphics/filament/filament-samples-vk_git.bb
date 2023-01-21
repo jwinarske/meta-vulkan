@@ -23,13 +23,17 @@ DEPENDS += "\
     wayland-native \
     "
 
-PV .= "+${SRCPV}"
-
-SRC_URI = "git://github.com/jwinarske/filament-samples;protocol=https;branch=main"
-
 S = "${WORKDIR}/git"
 
-SRCREV = "${AUTOREV}"
+SRCREV = "20cbecfd7cbdaabc996894a8055b18f0b3856c6d"
+
+PV .= "+${SRCPV}"
+
+SRC_URI = "\
+    gitsm://github.com/google/filament.git;protocol=https;branch=main \
+    file://0001-Yocto-Patches.patch \
+"
+
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
@@ -49,15 +53,39 @@ EXTRA_OECMAKE += " \
     -D FILAMENT_SUPPORTS_OPENGL=OFF \
     -D FILAMENT_LINUX_IS_MOBILE=ON \
     -D FILAMENT_USE_SYSTEM_SDL2=ON \
+    -D FILAMENT_SKIP_SDL2=OFF \
     -D FILAMENT_SKIP_TESTS=ON \
-    -D FILAMENT_HOST_TOOLS_ROOT=${STAGING_BINDIR_NATIVE} \
-    -D IMPORT_EXECUTABLES=${S}/cmake/ImportExecutables-Release.cmake \
     -D DIST_ARCH=${BUILD_ARCH} \
+    -D FILAMENT_HOST_TOOLS_ROOT=${STAGING_BINDIR_NATIVE} \
+    -D IMPORT_EXECUTABLES_DIR=../recipe-sysroot-native/usr/include/cmake/filament \
     "
 
 do_install:append() {
     rm -rf ${D}${libdir}
     rm -rf ${D}${includedir}
+
+    install -d "${D}${datadir}/filament"
+
+    mv "${D}/usr/LICENSE" "${D}${datadir}/filament/LICENSE"
+    mv "${D}/usr/README.md" "${D}${datadir}/filament/README.md"
+
+    install -d ${D}${bindir}
+
+    install -m 755 ${B}/filament/backend/compute_test ${D}${bindir}/
+    install -m 755 ${B}/filament/benchmark/benchmark_filament ${D}${bindir}/
+    install -m 755 ${B}/filament/test/test_material_parser ${D}${bindir}/
+    install -m 755 ${B}/libs/bluevk/test_bluevk ${D}${bindir}/
+    install -m 755 ${B}/libs/camutils/test_camutils ${D}${bindir}/
+    install -m 755 ${B}/libs/filamat/test_filamat ${D}${bindir}/
+    install -m 755 ${B}/libs/filamat/test_filamat_lite ${D}${bindir}/
+    install -m 755 ${B}/libs/geometry/test_transcoder ${D}${bindir}/
+    install -m 755 ${B}/libs/ktxreader/test_ktxreader ${D}${bindir}/
+    install -m 755 ${B}/libs/math/test_math ${D}${bindir}/
+    install -m 755 ${B}/libs/utils/test_utils ${D}${bindir}/
+    install -m 755 ${B}/libs/filameshio/test_filameshio ${D}${bindir}/
+    install -m 755 ${B}/libs/viewer/test_settings ${D}${bindir}/
 }
+
+FILES:${PN} += "${datadir}"
 
 BBCLASSEXTEND = ""

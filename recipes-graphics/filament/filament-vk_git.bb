@@ -4,7 +4,7 @@ AUTHOR = "Filament Authors"
 HOMEPAGE = "https://github.com/google/filament"
 BUGTRACKER = "https://github.com/google/filament/issues"
 SECTION = "graphics"
-CVE_PRODUCT = ""
+
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57"
 
@@ -18,14 +18,16 @@ DEPENDS:class-target += "\
     vulkan-loader \
     "
 
+S = "${WORKDIR}/git"
+
+SRCREV = "20cbecfd7cbdaabc996894a8055b18f0b3856c6d"
+
 PV .= "+${SRCPV}"
 
-SRC_URI = "git://github.com/google/filament.git;protocol=https;branch=main \
-           file://ImportExecutables-Release.cmake"
-
-SRCREV = "dbe1386785fe89141e451f0406eedafbb7687029"
-
-S = "${WORKDIR}/git"
+SRC_URI = "\
+    git://github.com/google/filament.git;protocol=https;branch=main \
+    file://ImportExecutables-Release.cmake \
+"
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
@@ -56,8 +58,8 @@ EXTRA_OECMAKE:class-target += " \
     -D FILAMENT_SUPPORTS_VULKAN=ON \
     -D FILAMENT_SUPPORTS_OPENGL=OFF \
     -D FILAMENT_LINUX_IS_MOBILE=ON \
-    -D IMPORT_EXECUTABLES_DIR=. \
     -D FILAMENT_SKIP_SDL2=ON \
+    -D IMPORT_EXECUTABLES_DIR=. \
     -D DIST_ARCH=${BUILD_ARCH} \
     -D FILAMENT_HOST_TOOLS_ROOT=${STAGING_BINDIR_NATIVE} \
     ${PACKAGECONFIG_CONFARGS} \
@@ -70,17 +72,18 @@ do_configure:prepend:class-target () {
 do_install:append:class-native () {
     rm -rf ${D}${libdir}
     rm -rf ${D}${includedir}
+    install -Dm 644 ${WORKDIR}/ImportExecutables-Release.cmake \
+        ${D}${includedir}/cmake/filament/ImportExecutables-Release.cmake
 }
 
 do_install:append:class-target () {
     mv ${D}${libdir}/*/*.a ${D}${libdir}
+    rm ${D}${libdir}/libzstd.a
     rm -rf ${D}${libdir}/${BUILD_ARCH}
     rm ${D}/usr/LICENSE
     rm ${D}/usr/README.md
 }
 
-FILES:${PN}-staticdev += " \
-    ${libdir} \
-    "
+FILES:${PN}-staticdev += "${libdir}"
 
 BBCLASSEXTEND += "native nativesdk"
