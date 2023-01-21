@@ -5,7 +5,7 @@ HOMEPAGE = "https://github.com/vkmark/vkmark"
 BUGTRACKER = "https://github.com/vkmark/vkmark/issues"
 SECTION = "graphics"
 CVE_PRODUCT = ""
-LICENSE = "LGPL2.1"
+LICENSE = "LGPL-2.1-only"
 LIC_FILES_CHKSUM = "file://COPYING-LGPL2.1;md5=4fbd65380cdd255951079008b364516c"
 
 DEPENDS += "\
@@ -58,6 +58,9 @@ do_install() {
     rm -rf ${D}${datadir}/man
 }
 
-FILES:${PN} += "${datadir}"
+FILES:${PN} += "\
+    ${libdir} \
+    ${datadir} \
+"
 
 BBCLASSEXTEND = ""

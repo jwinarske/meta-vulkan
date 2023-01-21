@@ -18,6 +18,8 @@ DEPENDS:class-target += "\
     vulkan-loader \
     "
 
+REQUIRED_DISTRO_FEATURES:class-target = "vulkan"
+
 S = "${WORKDIR}/git"
 
 SRCREV = "20cbecfd7cbdaabc996894a8055b18f0b3856c6d"
@@ -39,7 +41,7 @@ PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
 PACKAGECONFIG[wayland] = "-DFILAMENT_SUPPORTS_WAYLAND=ON,-DFILAMENT_SUPPORTS_WAYLAND=OFF,wayland"
 PACKAGECONFIG[x11] = "-DFILAMENT_SUPPORTS_X11=ON,-DFILAMENT_SUPPORTS_X11=OFF,libxcb libx11 libxrandr"
 
-inherit cmake pkgconfig
+inherit cmake pkgconfig features_check
 
 EXTRA_OECMAKE:class-native += " \
     -D BUILD_SHARED_LIBS=OFF \

@@ -25,7 +25,7 @@ REQUIRED_DISTRO_FEATURES = "vulkan"
 
 SRC_URI = "git://github.com/Igalia/vkrunner.git;protocol=https;branch=master"
 
-SRCREV = "1b4cc6b129e857d88ba9487bc8a4983d6a11df02"
+SRCREV = "810bfc5108cd002513e2578c23543329cc8ae5f5"
 
 S = "${WORKDIR}/git"
 
@@ -40,8 +40,6 @@ do_install:append() {
     cp -r ${S}/examples/* ${D}${datadir}/vkrunner/examples/
 }
 
-FILES:${PN} += "\
-    $[datadir} \
-    "
+FILES:${PN} += "${datadir}"
 
 BBCLASSEXTEND = ""

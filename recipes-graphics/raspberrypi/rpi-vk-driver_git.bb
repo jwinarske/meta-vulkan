@@ -22,6 +22,8 @@ DEPENDS += "\
     zlib \
    "
 
+REQUIRED_DISTRO_FEATURES = "vulkan"
+
 SRC_URI = "git://github.com/meta-flutter/rpi-vk-driver.git;protocol=https;branch=simplify"
 
 SRCREV = "${AUTOREV}"
@@ -32,7 +34,7 @@ RUNTIME = "llvm"
 TOOLCHAIN = "clang"
 PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
-inherit cmake
+inherit cmake features_check pkgconfig
 
 OECMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "BOTH"
 
@@ -40,9 +42,11 @@ EXTRA_OECMAKE += "\
     -D BUILD_TESTING=OFF \
     "
 
-FILES:${PN} = "${libdir}/librpi-vk-driver.so \
-               ${datadir}/vulkan/icd.d/rpi-vk-driver.json \
-              "
+FILES:${PN} = "\
+    ${libdir}/librpi-vk-driver.so \
+    ${datadir}/vulkan/icd.d/rpi-vk-driver.json \
+"
+
 FILES:${PN}-dev = "${bindir}/QPUassemblerExe"
 
 BBCLASSEXTEND = ""

@@ -17,11 +17,12 @@ DEPENDS += "\
     libpng \
     libsdl2 \
     libxkbcommon \
-    virtual/egl \
     vulkan-loader \
     wayland \
     wayland-native \
     "
+
+REQUIRED_DISTRO_FEATURES = "vulkan"
 
 S = "${WORKDIR}/git"
 
@@ -34,7 +35,6 @@ SRC_URI = "\
     file://0001-Yocto-Patches.patch \
 "
 
-
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
 PREFERRED_PROVIDER_libgcc = "compiler-rt"
@@ -44,7 +44,7 @@ PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
 PACKAGECONFIG[wayland] = "-DFILAMENT_SUPPORTS_WAYLAND=ON,-DFILAMENT_SUPPORTS_WAYLAND=OFF,wayland"
 PACKAGECONFIG[x11] = "-DFILAMENT_SUPPORTS_X11=ON,-DFILAMENT_SUPPORTS_X11=OFF,libxcb libx11 libxrandr"
 
-inherit cmake pkgconfig
+inherit cmake pkgconfig features_check
 
 EXTRA_OECMAKE += " \
     -D BUILD_SHARED_LIBS=OFF \

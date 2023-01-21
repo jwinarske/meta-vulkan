@@ -16,34 +16,31 @@ DEPENDS += "\
     libdrm \
    "
 
-REQUIRED_DISTRO_FEATURES = "vulkan"
-
-SRC_URI = "git://swiftshader.googlesource.com/SwiftShader;protocol=https"
+SRC_URI = "git://swiftshader.googlesource.com/SwiftShader;protocol=https;branch=master"
 
 SRCREV = "aae98adc2222dcada4aa952cccad48ab08e34004"
 
 S = "${WORKDIR}/git"
 
-inherit cmake features_check
+inherit cmake
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
 PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 PACKAGECONFIG ??= "\
-    ${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'vulkan', 'vulkan', '', d)} \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'opengl', 'virtual/gles2', '', d)} \
+    d2d gles2 \
+    ${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11 vulkan', d)} \
 "
 
 PACKAGECONFIG[wayland] = "-DSWIFTSHADER_BUILD_WSI_WAYLAND=ON,-DSWIFTSHADER_BUILD_WSI_WAYLAND=OFF,wayland wayland-native wayland-protocols"
 PACKAGECONFIG[x11] = ",,libxcb libx11 libxrandr"
 PACKAGECONFIG[vulkan] = "-DSWIFTSHADER_BUILD_VULKAN=ON,,vulkan-headers"
-PACKAGECONFIG[gles2] = "-DSWIFTSHADER_BUILD_EGL=ON -DSWIFTSHADER_BUILD_GLESv2=ON,,virtual/egl"
+PACKAGECONFIG[gles2] = "-DSWIFTSHADER_BUILD_EGL=ON -DSWIFTSHADER_BUILD_GLESv2=ON,,virtual/libgles2"
+PACKAGECONFIG[d2d] = "-DSWIFTSHADER_BUILD_WSI_D2D=ON,-DSWIFTSHADER_BUILD_WSI_D2D=OFF"
 
 # SWIFTSHADER_WARNINGS_AS_ERRORS=OFF for clang 13
 EXTRA_OECMAKE += " \
-    -D SWIFTSHADER_BUILD_WSI_D2D=ON \
     -D SWIFTSHADER_BUILD_PVR=FALSE \
     -D SWIFTSHADER_GET_PVR=FALSE \
     -D SWIFTSHADER_BUILD_ANGLE=FALSE \
@@ -55,13 +52,11 @@ EXTRA_OECMAKE += " \
 
 do_install () {
 
-    install -d ${D}${libdir}
-    cp ${WORKDIR}/build/Linux/libvk_swiftshader.so ${D}${libdir}
+    install -Dm 644 ${WORKDIR}/build/Linux/libvk_swiftshader.so \
+        ${D}${datadir}/vulkan/icd.d/libvk_swiftshader.so
 
-    install -d ${D}${datadir}/vulkan/icd.d
-    cp ${WORKDIR}/build/Linux/vk_swiftshader_icd.json ${D}${datadir}/vulkan/icd.d
-
-    sed -i "s|./libvk_swiftshader.so|/usr/lib/libvk_swiftshader.so|g" ${D}${datadir}/vulkan/icd.d/vk_swiftshader_icd.json
+    install -Dm 644 ${WORKDIR}/build/Linux/vk_swiftshader_icd.json \
+        ${D}${datadir}/vulkan/icd.d/vk_swiftshader_icd.json
 }
 
 FILES:${PN} += "${datadir}"
