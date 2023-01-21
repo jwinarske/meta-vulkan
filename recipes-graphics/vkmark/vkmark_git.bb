@@ -19,13 +19,16 @@ DEPENDS += "\
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
 
-SRC_URI = "git://github.com/jwinarske/vkmark.git;protocol=https;branch=jw/vulkan_dep"
-
-SRCREV = "${AUTOREV}"
-
 S = "${WORKDIR}/git"
 
-inherit meson pkgconfig features_check
+SRCREV = "30d2cd37f0566589d90914501fc7c51a4e51f559"
+
+SRC_URI = "\
+    git://github.com/vkmark/vkmark.git;protocol=https;branch=master \
+    file://0001-vulkan_hpp-crosscompile.patch \
+"
+
+inherit meson features_check pkgconfig
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
@@ -40,27 +43,20 @@ PACKAGECONFIG[xcb] = "-Dxcb=true,-Dxcb=false,virtual/libx11 libxcb"
 EXTRA_OEMESON += "--prefix ${STAGING_DIR_TARGET}/usr"
 
 do_install() {
-    install -d ${D}${bindir}
-    cp ${WORKDIR}/build/src/vkmark ${D}${bindir}
-
-    install -d ${D}${libdir}
-    cp ${WORKDIR}/build/src/wayland.so ${D}${libdir}
-
     install -d ${D}${datadir}/vkmark/models
-    cp -r ${S}/data/models/* ${D}${datadir}/vkmark/models
-
     install -d ${D}${datadir}/vkmark/shaders
-    cp -r ${S}/data/shaders/* ${D}${datadir}/vkmark/shaders
-
     install -d ${D}${datadir}/vkmark/textures
+
+    cp ${WORKDIR}/build/src/vkmark ${D}${datadir}/vkmark/
+    cp ${WORKDIR}/build/src/wayland.so ${D}${datadir}/vkmark/
+
+    cp -r ${S}/data/models/* ${D}${datadir}/vkmark/models
+    cp -r ${S}/data/shaders/* ${D}${datadir}/vkmark/shaders
     cp -r ${S}/data/textures/* ${D}${datadir}/vkmark/textures
 
     rm -rf ${D}${datadir}/man
 }
 
-FILES:${PN} += "\
-    ${libdir} \
-    ${datadir} \
-"
+FILES:${PN} += "${datadir}"
 
 BBCLASSEXTEND = ""

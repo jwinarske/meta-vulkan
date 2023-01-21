@@ -24,11 +24,11 @@ DEPENDS += "\
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
 
-SRC_URI = "git://github.com/meta-flutter/rpi-vk-driver.git;protocol=https;branch=simplify"
-
-SRCREV = "${AUTOREV}"
-
 S = "${WORKDIR}/git"
+
+SRCREV = "6bfd11b1ccb947e4eb8d1665083d56d66707de01"
+
+SRC_URI = "git://github.com/Yours3lf/rpi-vk-driver.git;protocol=https;branch=master"
 
 RUNTIME = "llvm"
 TOOLCHAIN = "clang"
@@ -40,7 +40,12 @@ OECMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "BOTH"
 
 EXTRA_OECMAKE += "\
     -D BUILD_TESTING=OFF \
-    "
+    -DRPI_ARCH=${BUILD_ARCH} \
+"
+
+do_configure:prepend() {
+    export PATH="${STAGING_DIR_NATIVE}${bindir}":"${PATH}"
+}
 
 FILES:${PN} = "\
     ${libdir}/librpi-vk-driver.so \
