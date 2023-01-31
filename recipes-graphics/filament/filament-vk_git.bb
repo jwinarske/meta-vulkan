@@ -22,7 +22,7 @@ REQUIRED_DISTRO_FEATURES:class-target = "vulkan"
 
 S = "${WORKDIR}/git"
 
-SRCREV = "20cbecfd7cbdaabc996894a8055b18f0b3856c6d"
+SRCREV = "2eb0dd7153175c8d82957b37946b6181d037f110"
 
 PV .= "+${SRCPV}"
 
