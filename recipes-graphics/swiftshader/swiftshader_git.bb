@@ -1,6 +1,6 @@
 SUMMARY = "SwiftShader"
 DESCRIPTION = "SwiftShader is a high-performance CPU-based implementation \
-               of the Vulkan graphics API12. Its goal is to provide hardware \
+               of the Vulkan 1.3 graphics API. Its goal is to provide hardware \
                independence for advanced 3D graphics."
 AUTHOR = "Google"
 HOMEPAGE = "https://swiftshader.googlesource.com/SwiftShader"
@@ -18,7 +18,7 @@ DEPENDS += "\
 
 SRC_URI = "git://swiftshader.googlesource.com/SwiftShader;protocol=https;branch=master"
 
-SRCREV = "aae98adc2222dcada4aa952cccad48ab08e34004"
+SRCREV = "938d3a1fac4deda77efb1c22c5e080ee4686eb0a"
 
 S = "${WORKDIR}/git"
 
@@ -55,10 +55,11 @@ do_install () {
     install -Dm 644 ${WORKDIR}/build/Linux/libvk_swiftshader.so \
         ${D}${libdir}/libvk_swiftshader.so
 
-    install -Dm 644 ${WORKDIR}/build/Linux/vk_swiftshader_icd.json \
-        ${D}${datadir}/vulkan/vk_swiftshader_icd.json
+    sed -i "s|./libvk_swiftshader.so|/usr/lib/libvk_swiftshader.so|g" \
+        ${WORKDIR}/build/Linux/vk_swiftshader_icd.json
 
-    sed -i "s|./libvk_swiftshader.so|/usr/lib/libvk_swiftshader.so|g" ${D}${datadir}/vulkan/vk_swiftshader_icd.json
+    install -Dm 644 ${WORKDIR}/build/Linux/vk_swiftshader_icd.json \
+        ${D}${datadir}/vulkan/icd.d/vk_swiftshader_icd.json
 }
 
 FILES:${PN} += "\
