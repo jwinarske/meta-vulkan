@@ -14,7 +14,11 @@ DEPENDS += "\
     compiler-rt \
     libcxx \
     libdrm \
-   "
+"
+
+RDEPENDS:${PN} += "\
+    vulkan-loader \
+"
 
 SRC_URI = "git://swiftshader.googlesource.com/SwiftShader;protocol=https;branch=master"
 
