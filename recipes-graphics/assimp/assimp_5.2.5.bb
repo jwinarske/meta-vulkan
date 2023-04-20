@@ -12,7 +12,7 @@ DEPENDS += "\
     zlib \
 "
 
-SRC_URI = "git://github.com/assimp/assimp.git;branch=master \
+SRC_URI = "git://github.com/assimp/assimp.git;protocol=https;branch=master \
            "
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>(\d+(\.\d+)+))"
 

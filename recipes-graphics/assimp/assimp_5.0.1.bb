@@ -12,7 +12,7 @@ DEPENDS += "\
     zlib \
 "
 
-SRC_URI = "git://github.com/assimp/assimp.git;branch=assimp_5.0_release \
+SRC_URI = "git://github.com/assimp/assimp.git;protocol=https;branch=assimp_5.0_release \
            file://0001-closes-https-github.com-assimp-assimp-issues-2733-up.patch \
            file://0001-Use-ASSIMP_LIB_INSTALL_DIR-to-search-library.patch \
            "
