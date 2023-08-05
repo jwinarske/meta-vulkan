@@ -23,7 +23,7 @@ SRCREV_FORMAT="sasha-samples"
 
 SRC_URI = " \
     git://github.com/SaschaWillems/Vulkan.git;protocol=https;name=samples;branch=master \
-    git://github.com/SaschaWillems/Vulkan-Assets.git;protocol=https;name=assets;destsuffix=assets;branch=master \
+    git://github.com/SaschaWillems/Vulkan-Assets.git;protocol=https;name=assets;destsuffix=assets;branch=main \
 "
 
 SRCREV_samples = "bc39dd58faaabfc1a32dc79d5538c8973b28cbce"
