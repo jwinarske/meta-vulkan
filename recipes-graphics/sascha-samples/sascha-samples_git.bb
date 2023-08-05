@@ -26,8 +26,8 @@ SRC_URI = " \
     git://github.com/SaschaWillems/Vulkan-Assets.git;protocol=https;name=assets;destsuffix=assets;branch=master \
 "
 
-SRCREV_samples = "d9e6ac6ee8a0183918a3f591c41f7776319911fe"
-SRCREV_assets = "cef63c5c44cd0ad53e778ccdb150ff3b650183ab"
+SRCREV_samples = "bc39dd58faaabfc1a32dc79d5538c8973b28cbce"
+SRCREV_assets = "a27c0e584434d59b7c7a714e9180eefca6f0ec4b"
 
 S = "${WORKDIR}/git"
 
