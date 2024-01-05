@@ -30,6 +30,7 @@ SRC_URI = "\
     git://github.com/google/filament.git;protocol=https;branch=release \
     file://0001-error-ignoring-return-value-of-function-declared-wit.patch \
     file://0001-disable-backend-tests.patch \
+    file://0001-install-required-files.patch \
     file://ImportExecutables-Release.cmake \
 "
 
