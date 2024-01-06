@@ -29,8 +29,11 @@ SRCREV = "acfe9298d9113e64e71e63ad2f50f7e76db019dd"
 SRC_URI = "\
     git://github.com/google/filament.git;protocol=https;branch=release \
     file://0001-error-ignoring-return-value-of-function-declared-wit.patch \
-    file://0001-disable-backend-tests.patch \
-    file://0001-install-required-files.patch \
+    file://0002-disable-backend-tests.patch \
+    file://0003-install-required-files.patch \
+    file://0004-missing-reference-to-strlen.patch \
+    file://0005-move-include-contents-to-include-filament.patch \
+    file://0006-move-libraries-so-they-install.patch \
     file://ImportExecutables-Release.cmake \
 "
 
@@ -39,7 +42,7 @@ TOOLCHAIN = "clang"
 TOOLCHAIN:class-native = "clang"
 PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
-PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11 vulkan', d)}"
+PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11 vulkan', d)} samples"
 
 PACKAGECONFIG[opengl] = "-DFILAMENT_SUPPORTS_OPENGL=ON -DFILAMENT_SUPPORTS_EGL_ON_LINUX=ON,-DFILAMENT_SUPPORTS_OPENGL=OFF -DFILAMENT_SUPPORTS_EGL_ON_LINUX=OFF,virtual/egl virtual/libgles2"
 PACKAGECONFIG[vulkan] = "-DFILAMENT_SUPPORTS_VULKAN=ON,-DFILAMENT_SUPPORTS_VULKAN=OFF,vulkan-loader"
@@ -53,7 +56,6 @@ EXTRA_OECMAKE:class-native += " \
     -D FILAMENT_BUILD_FILAMAT=ON \
     -D FILAMENT_SKIP_SAMPLES=ON \
     -D FILAMENT_SKIP_SDL2=ON \
-    ${PACKAGECONFIG_CONFARGS} \
     "
 
 EXTRA_OECMAKE:class-target += " \
@@ -63,10 +65,10 @@ EXTRA_OECMAKE:class-target += " \
     -D FILAMENT_BUILD_FILAMAT=ON \
     -D FILAMENT_SKIP_SAMPLES=ON \
     -D FILAMENT_SKIP_SDL2=ON \
+    -D FILAMENT_ENABLE_LTO=ON \
     -D DIST_ARCH=${BUILD_ARCH} \
     -D IMPORT_EXECUTABLES_DIR=. \
     -D FILAMENT_HOST_TOOLS_ROOT=${WORKDIR}/host_tools/bin \
-    ${PACKAGECONFIG_CONFARGS} \
     "
 
 do_configure:prepend:class-target () {
@@ -121,6 +123,8 @@ do_install:append:class-native () {
 }
 
 do_install:append:class-target () {
+    install -D ${STAGING_DATADIR_NATIVE}/filament/host_tools.zip ${D}${datadir}/filament/host_tools.zip
+
     rm ${D}/usr/LICENSE
     rm ${D}/usr/README.md
 
@@ -129,10 +133,8 @@ do_install:append:class-target () {
         ${D}${includedir}/cmake/filament/ImportExecutables-Release.cmake
 
     install -d ${D}${libdir}/filament
-    mv ${D}${libdir}/${BUILD_ARCH}/*.a ${D}${libdir}/filament
+    mv ${D}${libdir}/*/*.a ${D}${libdir}/filament
     rm -rf ${D}${libdir}/${BUILD_ARCH}
-
-    install -D ${STAGING_DATADIR_NATIVE}/filament/host_tools.zip ${D}${datadir}/filament/host_tools.zip
 }
 
 PACKAGES =+ "${PN}-host-tools"
