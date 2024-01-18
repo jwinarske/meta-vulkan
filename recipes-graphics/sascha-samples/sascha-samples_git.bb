@@ -11,23 +11,17 @@ LIC_FILES_CHKSUM = "file://LICENSE.md;md5=dcf473723faabf17baa9b5f2207599d0"
 
 DEPENDS += " \
     compiler-rt \
+    glm \
     libcxx \
     openmp \
     vulkan-loader \
-    glm \
 "
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
 
-SRCREV_FORMAT="sasha-samples"
+SRCREV = "24591c6570904047818aafbb8089827fc1a86354"
 
-SRC_URI = " \
-    git://github.com/SaschaWillems/Vulkan.git;protocol=https;name=samples;branch=master \
-    git://github.com/SaschaWillems/Vulkan-Assets.git;protocol=https;name=assets;destsuffix=assets;branch=main \
-"
-
-SRCREV_samples = "bc39dd58faaabfc1a32dc79d5538c8973b28cbce"
-SRCREV_assets = "a27c0e584434d59b7c7a714e9180eefca6f0ec4b"
+SRC_URI = "gitsm://github.com/SaschaWillems/Vulkan.git;protocol=https;name=samples;branch=master"
 
 S = "${WORKDIR}/git"
 
@@ -65,16 +59,8 @@ EXTRA_OECMAKE += " \
     -DCMAKE_INSTALL_BINDIR=${bindir}/vulkan-samples \
 "
 
-# assets must be copied instead of directly placed in data using the SRC_URI
-# options because yocto will clobber the contents of the destination directory
-
-do_configure:prepend () {
-    cp -r ${WORKDIR}/assets/* ${S}/data/
-}
-
 FILES:${PN} += " \
-    ${datadir}/vulkan-samples \
-    ${bindir}/vulkan-samples \
+    ${datadir} \
 "
 
 BBCLASSEXTEND = ""

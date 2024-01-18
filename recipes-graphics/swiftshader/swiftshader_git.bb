@@ -22,7 +22,7 @@ RDEPENDS:${PN} += "\
 
 SRC_URI = "git://swiftshader.googlesource.com/SwiftShader;protocol=https;branch=master"
 
-SRCREV = "938d3a1fac4deda77efb1c22c5e080ee4686eb0a"
+SRCREV = "f4819d2276b777e8d6dfb32b34c1130e7945f9b8"
 
 S = "${WORKDIR}/git"
 
@@ -33,7 +33,8 @@ TOOLCHAIN = "clang"
 PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 PACKAGECONFIG ??= "\
-    d2d gles2 \
+    d2d \
+    gles2 \
     ${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11 vulkan', d)} \
 "
 
