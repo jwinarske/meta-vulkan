@@ -34,6 +34,7 @@ SRC_URI = "\
     file://0004-missing-reference-to-strlen.patch \
     file://0005-move-include-contents-to-include-filament.patch \
     file://0006-move-libraries-so-they-install.patch \
+    file://0001-return-shader-type-mobile-for-linux-vulkan.patch \
     file://ImportExecutables-Release.cmake \
 "
 
