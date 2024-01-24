@@ -5,43 +5,41 @@ HOMEPAGE = "https://github.com/krh/vkcube"
 BUGTRACKER = "https://github.com/krh/vkcube"
 SECTION = "graphics"
 CVE_PRODUCT = "vkcube"
-LICENSE = "CLOSED"
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "\
+    file://${COREBASE}/meta/files/common-licenses/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302 \
+"
 
-DEPENDS += "\
-    compiler-rt \
-    drm \
-    libcxx \
+DEPENDS_append = "\
+    libdrm \
     libpng \
+    udev \
+    virtual/egl \
     virtual/libgbm \
+    gbm-headers \
     vulkan-loader \
    "
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
 
-SRC_URI = "git://github.com/jwinarske/vkcube.git;protocol=https;branch=yocto"
+SRCREV = "f77395324a3297b2b6ffd7bce0383073e4670190"
 
-SRCREV = "${AUTOREV}"
+SRC_URI = "git://github.com/krh/vkcube.git;protocol=https;branch=master"
 
 S = "${WORKDIR}/git"
-
-RUNTIME = "llvm"
-TOOLCHAIN = "clang"
-PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 inherit meson pkgconfig features_check
 
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
 
 PACKAGECONFIG[wayland] = "-Dwayland=true,-Dwayland=false,wayland wayland-native wayland-protocols"
-PACKAGECONFIG[xcb] = "-Dxcb=true,-Dxcb=false,virtual/libx11 libxcb"
+PACKAGECONFIG[x11] = "-Dxcb=true,-Dxcb=false,virtual/libx11 libxcb"
+
+EXTRA_OEMESON = "--buildtype release"
 
 do_install() {
     install -d ${D}${bindir}
     cp vkcube ${D}${bindir}
 }
-
-FILES_${PN} = "\
-    ${bindir} \
-    "
 
 BBCLASSEXTEND = ""
