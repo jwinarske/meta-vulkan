@@ -11,16 +11,26 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=4a8c8edce973aab6aaecb609fbab16bd"
 DEPENDS += "\
     compiler-rt \
     libcxx \
+    unzip-native \
     zip-native \
     "
 
 DEPENDS:class-target += "\
     filament-vk-native \
     vulkan-loader \
-    unzip-native \
     "
 
 REQUIRED_DISTRO_FEATURES:class-target = "vulkan"
+
+RUNTIME:class-native = "llvm"
+TOOLCHAIN:class-native = "clang"
+PREFERRED_PROVIDER_libgcc:class-native = "compiler-rt"
+LIBCPLUSPLUS:class-native = "-stdlib=libc++"
+
+RUNTIME:class-target = "llvm"
+TOOLCHAIN:class-target = "clang"
+PREFERRED_PROVIDER_libgcc:class-target = "compiler-rt"
+LIBCPLUSPLUS:class-target = "-stdlib=libc++"
 
 S = "${WORKDIR}/git"
 
@@ -37,11 +47,6 @@ SRC_URI = "\
     file://0001-return-shader-type-mobile-for-linux-vulkan.patch \
     file://ImportExecutables-Release.cmake \
 "
-
-RUNTIME = "llvm"
-TOOLCHAIN = "clang"
-TOOLCHAIN:class-native = "clang"
-PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11 vulkan', d)} samples"
 

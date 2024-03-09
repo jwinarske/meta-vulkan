@@ -11,8 +11,6 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=d273d63619c9aeaf15cdaf76422c4f87"
 
 DEPENDS += "\
-    compiler-rt \
-    libcxx \
     libdrm \
 "
 
@@ -22,15 +20,11 @@ RDEPENDS:${PN} += "\
 
 SRC_URI = "git://swiftshader.googlesource.com/SwiftShader;protocol=https;branch=master"
 
-SRCREV = "f4819d2276b777e8d6dfb32b34c1130e7945f9b8"
+SRCREV = "bbe6452b420c5ddc4b0fd421b0a3ce271262f4ca"
 
 S = "${WORKDIR}/git"
 
 inherit cmake
-
-RUNTIME = "llvm"
-TOOLCHAIN = "clang"
-PREFERRED_PROVIDER_libgcc = "compiler-rt"
 
 PACKAGECONFIG ??= "\
     d2d \
@@ -44,7 +38,7 @@ PACKAGECONFIG[vulkan] = "-DSWIFTSHADER_BUILD_VULKAN=ON,,vulkan-headers"
 PACKAGECONFIG[gles2] = "-DSWIFTSHADER_BUILD_EGL=ON -DSWIFTSHADER_BUILD_GLESv2=ON,,virtual/libgles2"
 PACKAGECONFIG[d2d] = "-DSWIFTSHADER_BUILD_WSI_D2D=ON,-DSWIFTSHADER_BUILD_WSI_D2D=OFF"
 
-# SWIFTSHADER_WARNINGS_AS_ERRORS=OFF for clang 13
+# SWIFTSHADER_WARNINGS_AS_ERRORS=OFF for clang 13+
 EXTRA_OECMAKE += " \
     -D SWIFTSHADER_BUILD_PVR=FALSE \
     -D SWIFTSHADER_GET_PVR=FALSE \
