@@ -34,21 +34,20 @@ LIBCPLUSPLUS:class-target = "-stdlib=libc++"
 
 S = "${WORKDIR}/git"
 
-SRCREV = "acfe9298d9113e64e71e63ad2f50f7e76db019dd"
+SRCREV = "3e556588fc7b0e901c3a0af96f1bd279891883cf"
 
 SRC_URI = "\
     git://github.com/google/filament.git;protocol=https;branch=release \
     file://0001-error-ignoring-return-value-of-function-declared-wit.patch \
     file://0002-disable-backend-tests.patch \
     file://0003-install-required-files.patch \
-    file://0004-missing-reference-to-strlen.patch \
-    file://0005-move-include-contents-to-include-filament.patch \
-    file://0006-move-libraries-so-they-install.patch \
-    file://0001-return-shader-type-mobile-for-linux-vulkan.patch \
+    file://0004-move-include-contents-to-include-filament.patch \
+    file://0005-move-libraries-so-they-install.patch \
+    file://0006-return-shader-type-mobile-for-linux-vulkan.patch \
     file://ImportExecutables-Release.cmake \
 "
 
-PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11 vulkan', d)} samples"
+PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11 vulkan', d)}"
 
 PACKAGECONFIG[opengl] = "-DFILAMENT_SUPPORTS_OPENGL=ON -DFILAMENT_SUPPORTS_EGL_ON_LINUX=ON,-DFILAMENT_SUPPORTS_OPENGL=OFF -DFILAMENT_SUPPORTS_EGL_ON_LINUX=OFF,virtual/egl virtual/libgles2"
 PACKAGECONFIG[vulkan] = "-DFILAMENT_SUPPORTS_VULKAN=ON,-DFILAMENT_SUPPORTS_VULKAN=OFF,vulkan-loader"
@@ -144,6 +143,8 @@ do_install:append:class-target () {
 }
 
 PACKAGES =+ "${PN}-host-tools"
+
+INHIBIT_PACKAGE_DEBUG_SPLIT:class-target = "1"
 
 FILES:${PN}-staticdev += "${libdir}"
 
