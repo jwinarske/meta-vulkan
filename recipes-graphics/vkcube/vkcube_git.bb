@@ -10,21 +10,18 @@ LIC_FILES_CHKSUM = "\
     file://${COREBASE}/meta/files/common-licenses/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302 \
 "
 
-DEPENDS_append = "\
-    libdrm \
+DEPENDS += "\
+    drm \
     libpng \
-    udev \
-    virtual/egl \
     virtual/libgbm \
-    gbm-headers \
     vulkan-loader \
    "
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
 
-SRCREV = "f77395324a3297b2b6ffd7bce0383073e4670190"
-
 SRC_URI = "git://github.com/krh/vkcube.git;protocol=https;branch=master"
+
+SRCREV = "f77395324a3297b2b6ffd7bce0383073e4670190"
 
 S = "${WORKDIR}/git"
 
@@ -35,7 +32,7 @@ PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)}"
 PACKAGECONFIG[wayland] = "-Dwayland=true,-Dwayland=false,wayland wayland-native wayland-protocols"
 PACKAGECONFIG[x11] = "-Dxcb=true,-Dxcb=false,virtual/libx11 libxcb"
 
-EXTRA_OEMESON = "--buildtype release"
+EXTRA_OEMESON += "--buildtype release"
 
 do_install() {
     install -d ${D}${bindir}

@@ -16,7 +16,7 @@ SRC_URI = "git://github.com/assimp/assimp.git;protocol=https;branch=master \
            "
 UPSTREAM_CHECK_GITTAGREGEX = "v(?P<pver>(\d+(\.\d+)+))"
 
-SRCREV = "6a08c39e3a91ef385e76515cfad86aca4bfd57ff"
+SRCREV = "9519a62dd20799c5493c638d1ef5a6f484e5faf1"
 
 S = "${WORKDIR}/git"
 

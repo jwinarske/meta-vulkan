@@ -10,13 +10,15 @@ CVE_PRODUCT = ""
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=d273d63619c9aeaf15cdaf76422c4f87"
 
-DEPENDS_append = "\
+DEPENDS += "\
     compiler-rt \
     libcxx \
     libdrm \
 "
 
-RDEPENDS_${PN} += "vulkan-loader"
+RDEPENDS:${PN} += "\
+    vulkan-loader \
+"
 
 SRC_URI = "git://swiftshader.googlesource.com/SwiftShader;protocol=https;branch=master"
 
@@ -43,7 +45,7 @@ PACKAGECONFIG[gles2] = "-DSWIFTSHADER_BUILD_EGL=ON -DSWIFTSHADER_BUILD_GLESv2=ON
 PACKAGECONFIG[d2d] = "-DSWIFTSHADER_BUILD_WSI_D2D=ON,-DSWIFTSHADER_BUILD_WSI_D2D=OFF"
 
 # SWIFTSHADER_WARNINGS_AS_ERRORS=OFF for clang 13
-EXTRA_OECMAKE = "\
+EXTRA_OECMAKE += " \
     -D SWIFTSHADER_BUILD_PVR=FALSE \
     -D SWIFTSHADER_GET_PVR=FALSE \
     -D SWIFTSHADER_BUILD_ANGLE=FALSE \
@@ -65,11 +67,11 @@ do_install () {
         ${D}${datadir}/vulkan/icd.d/vk_swiftshader_icd.json
 }
 
-FILES_${PN} += "\
+FILES:${PN} += "\
     ${libdir} \
     ${datadir} \
 "
 
-FILES_${PN}-dev = ""
+FILES:${PN}-dev = ""
 
 BBCLASSEXTEND = ""

@@ -8,19 +8,19 @@ SECTION = "graphics"
 LICENSE = "Apache-2.0"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=4a8c8edce973aab6aaecb609fbab16bd"
 
-DEPENDS_append = "\
+DEPENDS += "\
     compiler-rt \
     libcxx \
     zip-native \
     "
 
-DEPENDS_append_class-target = "\
+DEPENDS:class-target += "\
     filament-vk-native \
     vulkan-loader \
     unzip-native \
     "
 
-REQUIRED_DISTRO_FEATURES_class-target = "vulkan"
+REQUIRED_DISTRO_FEATURES:class-target = "vulkan"
 
 S = "${WORKDIR}/git"
 
@@ -34,7 +34,7 @@ SRC_URI = "\
     file://0004-missing-reference-to-strlen.patch \
     file://0005-move-include-contents-to-include-filament.patch \
     file://0006-move-libraries-so-they-install.patch \
-    file://0007-return-shader-type-mobile-for-linux-vulkan.patch \
+    file://0001-return-shader-type-mobile-for-linux-vulkan.patch \
     file://ImportExecutables-Release.cmake \
 "
 
@@ -42,12 +42,8 @@ RUNTIME = "llvm"
 TOOLCHAIN = "clang"
 TOOLCHAIN:class-native = "clang"
 PREFERRED_PROVIDER_libgcc = "compiler-rt"
-LIBCPLUSPLUS = "-stdlib=libc++"
 
-CFLAGS_remove = "-fexpensive-optimizations -frename-registers -finline-limit=64 -Wno-error=maybe-uninitialized"
-CXXFLAGS_remove = "-fexpensive-optimizations -frename-registers -finline-limit=64 -Wno-error=maybe-uninitialized"
-
-PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11 vulkan', d)}"
+PACKAGECONFIG ??= "${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11 vulkan', d)} samples"
 
 PACKAGECONFIG[opengl] = "-DFILAMENT_SUPPORTS_OPENGL=ON -DFILAMENT_SUPPORTS_EGL_ON_LINUX=ON,-DFILAMENT_SUPPORTS_OPENGL=OFF -DFILAMENT_SUPPORTS_EGL_ON_LINUX=OFF,virtual/egl virtual/libgles2"
 PACKAGECONFIG[vulkan] = "-DFILAMENT_SUPPORTS_VULKAN=ON,-DFILAMENT_SUPPORTS_VULKAN=OFF,vulkan-loader"
@@ -56,27 +52,27 @@ PACKAGECONFIG[x11] = "-DFILAMENT_SUPPORTS_X11=ON -DFILAMENT_SUPPORTS_XCB=ON,-DFI
 
 inherit cmake pkgconfig features_check
 
-EXTRA_OECMAKE_append_class-native = "\
+EXTRA_OECMAKE:class-native += " \
     -D CMAKE_BUILD_TYPE=Release \
     -D FILAMENT_BUILD_FILAMAT=ON \
     -D FILAMENT_SKIP_SAMPLES=ON \
     -D FILAMENT_SKIP_SDL2=ON \
-"
+    "
 
-EXTRA_OECMAKE_append_class-target = "\
+EXTRA_OECMAKE:class-target += " \
     -D BUILD_SHARED_LIBS=OFF \
     -D CMAKE_BUILD_TYPE=Release \
     -D FILAMENT_LINUX_IS_MOBILE=ON \
     -D FILAMENT_BUILD_FILAMAT=ON \
     -D FILAMENT_SKIP_SAMPLES=ON \
     -D FILAMENT_SKIP_SDL2=ON \
-    -D FILAMENT_ENABLE_LTO=OFF \
+    -D FILAMENT_ENABLE_LTO=ON \
     -D DIST_ARCH=${BUILD_ARCH} \
     -D IMPORT_EXECUTABLES_DIR=. \
     -D FILAMENT_HOST_TOOLS_ROOT=${WORKDIR}/host_tools/bin \
     "
 
-do_configure_prepend_class-target () {
+do_configure:prepend:class-target () {
     # extract host_tools.zip
     rm -rf ${WORKDIR}/host_tools | true
     unzip ${STAGING_DATADIR_NATIVE}/filament/host_tools.zip -d ${WORKDIR}
@@ -85,7 +81,7 @@ do_configure_prepend_class-target () {
     cp ${WORKDIR}/ImportExecutables-Release.cmake ${S}/ImportExecutables-Release.cmake
 }
 
-do_install_append_class-native () {
+do_install:append:class-native () {
     rm -rf ${D}${includedir}
     rm -rf ${D}${libdir}
 
@@ -127,7 +123,7 @@ do_install_append_class-native () {
     rm -rf host_tools
 }
 
-do_install_append_class-target () {
+do_install:append:class-target () {
     install -D ${STAGING_DATADIR_NATIVE}/filament/host_tools.zip ${D}${datadir}/filament/host_tools.zip
 
     rm ${D}/usr/LICENSE
@@ -138,11 +134,9 @@ do_install_append_class-target () {
         ${D}${includedir}/cmake/filament/ImportExecutables-Release.cmake
 
     install -d ${D}${libdir}/filament
-    mv ${D}${libdir}/*/*.a ${D}${libdir}/filament/
+    mv ${D}${libdir}/*/*.a ${D}${libdir}/filament
     rm -rf ${D}${libdir}/${BUILD_ARCH}
 }
-
-ALLOW_EMPTY_${PN} = "1"
 
 PACKAGES =+ "${PN}-host-tools"
 

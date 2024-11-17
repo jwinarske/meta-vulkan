@@ -9,9 +9,11 @@ CVE_PRODUCT = ""
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE.md;md5=dcf473723faabf17baa9b5f2207599d0"
 
-DEPENDS_append = "\
+DEPENDS += " \
+    compiler-rt \
     glm \
-    vulkan-headers \
+    libcxx \
+    openmp \
     vulkan-loader \
 "
 
@@ -25,6 +27,11 @@ S = "${WORKDIR}/git"
 
 inherit cmake features_check pkgconfig
 
+RUNTIME = "llvm"
+TOOLCHAIN = "clang"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgomp = "openmp"
+
 PACKAGECONFIG ??= " \
     ${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)} \
 "
@@ -33,7 +40,7 @@ PACKAGECONFIG ??= " \
 # really only removes the unnecessary runtime deps. it doesn't change linking
 # options
 
-PACKAGECONFIG_remove ??= " \
+PACKAGECONFIG:remove ??= " \
     ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'x11', '', d)} \
 "
 
@@ -47,11 +54,13 @@ PACKAGECONFIG[wayland] = "-DUSE_WAYLAND_WSI=ON,,wayland wayland-native wayland-p
 PACKAGECONFIG[headless] = "-DUSE_HEADLESS=ON"
 PACKAGECONFIG[x11] = ",,libxcb libx11 libxrandr"
 
-EXTRA_OECMAKE = " \
-    -D RESOURCE_INSTALL_DIR=${datadir}/vulkan-samples/assets \
-    -D CMAKE_INSTALL_BINDIR=${bindir}/vulkan-samples \
+EXTRA_OECMAKE += " \
+    -DRESOURCE_INSTALL_DIR=${datadir}/vulkan-samples/assets \
+    -DCMAKE_INSTALL_BINDIR=${bindir}/vulkan-samples \
 "
 
-FILES_${PN} += "${datadir}"
+FILES:${PN} += " \
+    ${datadir} \
+"
 
 BBCLASSEXTEND = ""
