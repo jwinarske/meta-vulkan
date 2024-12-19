@@ -3,6 +3,8 @@ From: Joel Winarske <joel.winarske@gmail.com>
 Date: Wed, 12 Jun 2024 06:47:04 -0700
 Subject: [PATCH 4/5] move include contents to include filament
 
+Upstream-Status: Inappropriate
+
 Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
 ---
  filament/CMakeLists.txt                          | 2 +-

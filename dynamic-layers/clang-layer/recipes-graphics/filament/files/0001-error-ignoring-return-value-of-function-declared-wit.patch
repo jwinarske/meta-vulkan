@@ -3,6 +3,8 @@ From: Joel Winarske <joel.winarske@gmail.com>
 Date: Wed, 12 Jun 2024 06:40:59 -0700
 Subject: [PATCH 1/5] error ignoring return value of function declared wit
 
+Upstream-Status: Inappropriate
+
 Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
 ---
  libs/utils/include/utils/memalign.h | 2 +-

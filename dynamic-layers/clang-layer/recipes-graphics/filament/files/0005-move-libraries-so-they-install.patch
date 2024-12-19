@@ -3,6 +3,8 @@ From: Joel Winarske <joel.winarske@gmail.com>
 Date: Wed, 12 Jun 2024 06:49:14 -0700
 Subject: [PATCH 5/5] move libraries so they install
 
+Upstream-Status: Inappropriate
+
 Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
 ---
  CMakeLists.txt | 8 ++++----

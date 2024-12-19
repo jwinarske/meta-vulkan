@@ -3,6 +3,8 @@ From: Joel Winarske <joel.winarske@gmail.com>
 Date: Wed, 12 Jun 2024 06:43:06 -0700
 Subject: [PATCH 3/5] install required files
 
+Upstream-Status: Inappropriate
+
 Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
 ---
  libs/imageio/CMakeLists.txt            | 10 ++++++++--
