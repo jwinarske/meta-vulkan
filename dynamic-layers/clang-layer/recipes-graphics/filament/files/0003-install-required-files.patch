@@ -1,7 +1,7 @@
-From cc923cd0b88c587f0559fe2d6a830f3781154a69 Mon Sep 17 00:00:00 2001
+From b372af9a860c72e51c744e275b83a62862c468f9 Mon Sep 17 00:00:00 2001
 From: Joel Winarske <joel.winarske@gmail.com>
-Date: Wed, 12 Jun 2024 06:43:06 -0700
-Subject: [PATCH 3/5] install required files
+Date: Thu, 19 Dec 2024 14:58:31 -0800
+Subject: [PATCH 3/6] install required files
 
 Upstream-Status: Inappropriate
 
@@ -71,5 +71,5 @@ index 20955b77b..ffe7cdfe1 100644
 +install(FILES ${PUBLIC_HDRS} DESTINATION include)
 +install(TARGETS ${TARGET} ARCHIVE DESTINATION lib/${DIST_DIR})
 -- 
-2.45.1
+2.47.1
 

@@ -1,7 +1,7 @@
-From 97fd693d50312f684c209262de99383c0347f00c Mon Sep 17 00:00:00 2001
+From 8def6db5a66756e08d6d155e53ca85feb5ed0f4e Mon Sep 17 00:00:00 2001
 From: Joel Winarske <joel.winarske@gmail.com>
-Date: Wed, 12 Jun 2024 06:47:04 -0700
-Subject: [PATCH 4/5] move include contents to include filament
+Date: Thu, 19 Dec 2024 15:00:21 -0800
+Subject: [PATCH 4/6] move include contents to include filament
 
 Upstream-Status: Inappropriate
 
@@ -37,10 +37,10 @@ Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
  27 files changed, 31 insertions(+), 31 deletions(-)
 
 diff --git a/filament/CMakeLists.txt b/filament/CMakeLists.txt
-index 796acedb7..f9453335f 100644
+index 18f402ad9..e0dd78c7c 100644
 --- a/filament/CMakeLists.txt
 +++ b/filament/CMakeLists.txt
-@@ -614,7 +614,7 @@ target_link_libraries(${TARGET} PRIVATE
+@@ -615,7 +615,7 @@ target_link_libraries(${TARGET} PRIVATE
  # ==================================================================================================
  set(INSTALL_TYPE ARCHIVE)
  install(TARGETS ${TARGET} ${INSTALL_TYPE} DESTINATION lib/${DIST_DIR})
@@ -134,10 +134,10 @@ index a7e8f398e..5a5bb88ec 100644
  set(COMBINED_DEPS
      ${TARGET}
 diff --git a/libs/gltfio/CMakeLists.txt b/libs/gltfio/CMakeLists.txt
-index c066cc229..a383410c0 100644
+index c7c7d6a63..44fb97219 100644
 --- a/libs/gltfio/CMakeLists.txt
 +++ b/libs/gltfio/CMakeLists.txt
-@@ -257,5 +257,5 @@ endif()
+@@ -260,5 +260,5 @@ endif()
  # ==================================================================================================
  
  install(TARGETS gltfio_core uberarchive ARCHIVE DESTINATION lib/${DIST_DIR})
@@ -361,5 +361,5 @@ index ffe7cdfe1..6ae9c7787 100644
 +install(FILES ${PUBLIC_HDRS} DESTINATION include/filament)
  install(TARGETS ${TARGET} ARCHIVE DESTINATION lib/${DIST_DIR})
 -- 
-2.45.1
+2.47.1
 

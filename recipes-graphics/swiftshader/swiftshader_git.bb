@@ -25,7 +25,7 @@ SRC_URI = "\
 
 SRCREV = "f72761e8676601271ae282f9581cde771db57a5b"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 inherit cmake
 
@@ -57,13 +57,13 @@ EXTRA_OECMAKE += " \
 
 do_install () {
 
-    install -Dm 644 ${WORKDIR}/build/Linux/libvk_swiftshader.so \
+    install -Dm 644 ${B}/Linux/libvk_swiftshader.so \
         ${D}${libdir}/libvk_swiftshader.so
 
     sed -i "s|./libvk_swiftshader.so|/usr/lib/libvk_swiftshader.so|g" \
-        ${WORKDIR}/build/Linux/vk_swiftshader_icd.json
+        ${B}/Linux/vk_swiftshader_icd.json
 
-    install -Dm 644 ${WORKDIR}/build/Linux/vk_swiftshader_icd.json \
+    install -Dm 644 ${B}/Linux/vk_swiftshader_icd.json \
         ${D}${datadir}/vulkan/icd.d/vk_swiftshader_icd.json
 }
 

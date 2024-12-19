@@ -1,7 +1,7 @@
-From 6a920a7612cfea25bbea78600b16e3075a30a8f7 Mon Sep 17 00:00:00 2001
+From 7e14d9e6910c3c1397064700638dcf25d32d5136 Mon Sep 17 00:00:00 2001
 From: Joel Winarske <joel.winarske@gmail.com>
-Date: Wed, 12 Jun 2024 06:41:19 -0700
-Subject: [PATCH 2/5] disable backend tests
+Date: Thu, 19 Dec 2024 14:58:03 -0800
+Subject: [PATCH 2/6] disable backend tests
 
 Upstream-Status: Inappropriate
 
@@ -132,5 +132,5 @@ index 6a7f66cc2..378f45aed 100644
 -
 -endif()
 -- 
-2.45.1
+2.47.1
 

@@ -23,7 +23,7 @@ SRC_URI = "git://github.com/krh/vkcube.git;protocol=https;branch=master"
 
 SRCREV = "f77395324a3297b2b6ffd7bce0383073e4670190"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 inherit meson pkgconfig features_check
 

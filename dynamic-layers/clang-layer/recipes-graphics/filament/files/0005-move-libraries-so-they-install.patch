@@ -1,7 +1,7 @@
-From ce9796a1f7af7dde4fbf1659630aaa038d048f2c Mon Sep 17 00:00:00 2001
+From d25e6a090899dcfd2baf0df92c2338af7bbd06c0 Mon Sep 17 00:00:00 2001
 From: Joel Winarske <joel.winarske@gmail.com>
-Date: Wed, 12 Jun 2024 06:49:14 -0700
-Subject: [PATCH 5/5] move libraries so they install
+Date: Thu, 19 Dec 2024 15:00:55 -0800
+Subject: [PATCH 5/6] move libraries so they install
 
 Upstream-Status: Inappropriate
 
@@ -49,5 +49,5 @@ index 283778b32..9f0d7ca2a 100644
      add_subdirectory(${TOOLS}/cmgen)
      add_subdirectory(${TOOLS}/cso-lut)
 -- 
-2.45.1
+2.47.1
 

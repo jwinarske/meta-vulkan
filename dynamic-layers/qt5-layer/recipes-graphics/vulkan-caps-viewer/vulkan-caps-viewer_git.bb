@@ -22,8 +22,7 @@ SRC_URI = "\
     gitsm://github.com/SaschaWillems/VulkanCapsViewer.git;protocol=https;branch=master \
 "
 
-S = "${WORKDIR}/git"
-
+S = "${UNPACKDIR}/git"
 
 inherit qmake5 features_check pkgconfig
 

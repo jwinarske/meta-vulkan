@@ -32,7 +32,7 @@ TOOLCHAIN:class-target = "clang"
 PREFERRED_PROVIDER_libgcc:class-target = "compiler-rt"
 LIBCPLUSPLUS:class-target = "-stdlib=libc++"
 
-S = "${WORKDIR}/git"
+S = "${UNPACKDIR}/git"
 
 SRCREV = "3e556588fc7b0e901c3a0af96f1bd279891883cf"
 
@@ -73,16 +73,16 @@ EXTRA_OECMAKE:class-target += " \
     -D FILAMENT_ENABLE_LTO=ON \
     -D DIST_ARCH=${BUILD_ARCH} \
     -D IMPORT_EXECUTABLES_DIR=. \
-    -D FILAMENT_HOST_TOOLS_ROOT=${WORKDIR}/host_tools/bin \
+    -D FILAMENT_HOST_TOOLS_ROOT=${UNPACKDIR}/host_tools/bin \
     "
 
 do_configure:prepend:class-target () {
     # extract host_tools.zip
-    rm -rf ${WORKDIR}/host_tools | true
-    unzip ${STAGING_DATADIR_NATIVE}/filament/host_tools.zip -d ${WORKDIR}
+    rm -rf ${UNPACKDIR}/host_tools | true
+    unzip ${STAGING_DATADIR_NATIVE}/filament/host_tools.zip -d ${UNPACKDIR}
 
     # overwrite auto generated version
-    cp ${WORKDIR}/ImportExecutables-Release.cmake ${S}/ImportExecutables-Release.cmake
+    cp ${UNPACKDIR}/ImportExecutables-Release.cmake ${S}/ImportExecutables-Release.cmake
 }
 
 do_install:append:class-native () {
@@ -134,7 +134,7 @@ do_install:append:class-target () {
     rm ${D}/usr/README.md
 
     # dependent recipe sets FILAMENT_HOST_TOOLS_ROOT to use
-    install -Dm 644 ${WORKDIR}/ImportExecutables-Release.cmake \
+    install -Dm 644 ${UNPACKDIR}/ImportExecutables-Release.cmake \
         ${D}${includedir}/cmake/filament/ImportExecutables-Release.cmake
 
     install -d ${D}${libdir}/filament
@@ -144,9 +144,11 @@ do_install:append:class-target () {
 
 PACKAGES =+ "${PN}-host-tools"
 
+
 INHIBIT_PACKAGE_DEBUG_SPLIT:class-target = "1"
 
 FILES:${PN}-staticdev += "${libdir}"
+INSANE_SKIP:${PN}-staticdev = "buildpaths"
 
 FILES:${PN}-dev += "${includedir}"
 
