@@ -1,7 +1,7 @@
-From 236966411650869c5e960f9bd8f0a83b1580b6bf Mon Sep 17 00:00:00 2001
+From cc923cd0b88c587f0559fe2d6a830f3781154a69 Mon Sep 17 00:00:00 2001
 From: Joel Winarske <joel.winarske@gmail.com>
-Date: Fri, 5 Jan 2024 12:55:59 -0800
-Subject: [PATCH] install required files
+Date: Wed, 12 Jun 2024 06:43:06 -0700
+Subject: [PATCH 3/5] install required files
 
 Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
 ---
@@ -69,5 +69,5 @@ index 20955b77b..ffe7cdfe1 100644
 +install(FILES ${PUBLIC_HDRS} DESTINATION include)
 +install(TARGETS ${TARGET} ARCHIVE DESTINATION lib/${DIST_DIR})
 -- 
-2.43.0
+2.45.1
 
