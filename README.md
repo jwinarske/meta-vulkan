@@ -2,7 +2,7 @@
 
 Layer that has Vulkan related recipes.  Either for running samples, or testing out a new platforms Vulkan support.
 
-## filament-vk
+## filament-samples
 Installed into /usr/bin/filament-samples
 
 ## sascha-samples
