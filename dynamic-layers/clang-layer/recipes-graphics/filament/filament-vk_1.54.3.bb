@@ -34,15 +34,16 @@ LIBCPLUSPLUS:class-target = "-stdlib=libc++"
 
 S = "${WORKDIR}/git"
 
-SRCREV = "f483c93c5a4afe2b0058fbdaee94a43bf340bf71"
+SRCREV = "3e556588fc7b0e901c3a0af96f1bd279891883cf"
 
 SRC_URI = "\
     git://github.com/google/filament.git;protocol=https;branch=release \
-    file://0001-disable-backend-tests.patch \
-    file://0002-install-required-files.patch \
-    file://0003-move-include-contents-to-include-filament.patch \
-    file://0004-move-libraries-so-they-install.patch \
-    file://0005-return-shader-type-mobile-for-linux-vulkan.patch \
+    file://0001-error-ignoring-return-value-of-function-declared-wit.patch \
+    file://0002-disable-backend-tests.patch \
+    file://0003-install-required-files.patch \
+    file://0004-move-include-contents-to-include-filament.patch \
+    file://0005-move-libraries-so-they-install.patch \
+    file://0006-return-shader-type-mobile-for-linux-vulkan.patch \
     file://ImportExecutables-Release.cmake \
 "
 
@@ -69,7 +70,7 @@ EXTRA_OECMAKE:class-target += " \
     -D FILAMENT_BUILD_FILAMAT=ON \
     -D FILAMENT_SKIP_SAMPLES=ON \
     -D FILAMENT_SKIP_SDL2=ON \
-    -D FILAMENT_ENABLE_LTO=OFF \
+    -D FILAMENT_ENABLE_LTO=ON \
     -D DIST_ARCH=${BUILD_ARCH} \
     -D IMPORT_EXECUTABLES_DIR=. \
     -D FILAMENT_HOST_TOOLS_ROOT=${WORKDIR}/host_tools/bin \
