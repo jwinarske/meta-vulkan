@@ -10,10 +10,7 @@ LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://LICENSE.md;md5=dcf473723faabf17baa9b5f2207599d0"
 
 DEPENDS += " \
-    compiler-rt \
     glm \
-    libcxx \
-    openmp \
     vulkan-loader \
 "
 
@@ -26,11 +23,6 @@ SRC_URI = "gitsm://github.com/SaschaWillems/Vulkan.git;protocol=https;name=sampl
 S = "${WORKDIR}/git"
 
 inherit cmake features_check pkgconfig
-
-RUNTIME = "llvm"
-TOOLCHAIN = "clang"
-PREFERRED_PROVIDER_libgcc = "compiler-rt"
-PREFERRED_PROVIDER_libgomp = "openmp"
 
 PACKAGECONFIG ??= " \
     ${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)} \
