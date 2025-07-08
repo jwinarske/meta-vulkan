@@ -20,8 +20,6 @@ SRCREV = "24591c6570904047818aafbb8089827fc1a86354"
 
 SRC_URI = "gitsm://github.com/SaschaWillems/Vulkan.git;protocol=https;name=samples;branch=master"
 
-S = "${UNPACKDIR}/git"
-
 inherit cmake features_check pkgconfig
 
 PACKAGECONFIG ??= " \

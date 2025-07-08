@@ -32,8 +32,6 @@ TOOLCHAIN:class-target = "clang"
 PREFERRED_PROVIDER_libgcc:class-target = "compiler-rt"
 LIBCPLUSPLUS:class-target = "-stdlib=libc++"
 
-S = "${UNPACKDIR}/git"
-
 SRCREV = "3e556588fc7b0e901c3a0af96f1bd279891883cf"
 
 SRC_URI = "\

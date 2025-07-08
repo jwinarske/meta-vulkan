@@ -36,8 +36,6 @@ SRC_URI = "\
 
 SRCREV = "b7bf48683cee22a35363e9a310893eb6b47c1a57"
 
-S = "${UNPACKDIR}/git"
-
 inherit pkgconfig cmake features_check
 
 PACKAGECONFIG ??= "\
