@@ -21,6 +21,9 @@ DEPENDS += "\
     libuv \
     virtual/egl \
     virtual/libgles3 \
+    \
+    compiler-rt \
+    libcxx \
 "
 
 RDEPENDS:${PN} += "\
@@ -44,6 +47,11 @@ PACKAGECONFIG ??= "\
 
 PACKAGECONFIG[wayland] = "-DMLN_WITH_WAYLAND=ON, -DMLN_WITH_WAYLAND=OFF, wayland wayland-native wayland-protocols"
 PACKAGECONFIG[x11] = "-DMLN_WITH_X11=ON, -DMLN_WITH_X11=OFF, libxcb libx11 libxrandr"
+
+RUNTIME = "llvm"
+TOOLCHAIN = "clang"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
+LIBCPLUSPLUS = "-stdlib=libc++"
 
 EXTRA_OECMAKE += " \
     -D BUILD_SHARED_LIBS=OFF \
