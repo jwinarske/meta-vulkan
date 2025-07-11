@@ -22,6 +22,16 @@ DEPENDS:class-target += "\
 
 REQUIRED_DISTRO_FEATURES:class-target = "vulkan"
 
+RUNTIME:class-native = "llvm"
+TOOLCHAIN:class-native = "clang"
+PREFERRED_PROVIDER_libgcc:class-native = "compiler-rt"
+LIBCPLUSPLUS:class-native = "-stdlib=libc++"
+
+RUNTIME:class-target = "llvm"
+TOOLCHAIN:class-target = "clang"
+PREFERRED_PROVIDER_libgcc:class-target = "compiler-rt"
+LIBCPLUSPLUS:class-target = "-stdlib=libc++"
+
 SRCREV = "3e556588fc7b0e901c3a0af96f1bd279891883cf"
 
 SRC_URI = "\
@@ -43,11 +53,6 @@ PACKAGECONFIG[wayland] = "-DFILAMENT_SUPPORTS_WAYLAND=ON,-DFILAMENT_SUPPORTS_WAY
 PACKAGECONFIG[x11] = "-DFILAMENT_SUPPORTS_X11=ON -DFILAMENT_SUPPORTS_XCB=ON,-DFILAMENT_SUPPORTS_X11=OFF -DFILAMENT_SUPPORTS_XCB=OFF,libxcb libx11 libxrandr"
 
 inherit cmake pkgconfig features_check
-
-RUNTIME = "llvm"
-TOOLCHAIN = "clang"
-PREFERRED_PROVIDER_libgcc = "compiler-rt"
-LIBCPLUSPLUS = "-stdlib=libc++"
 
 EXTRA_OECMAKE:class-native += " \
     -D CMAKE_BUILD_TYPE=Release \
