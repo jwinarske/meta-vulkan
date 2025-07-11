@@ -12,10 +12,6 @@ LIC_FILES_CHKSUM = "file://LICENSE.md;md5=dcf473723faabf17baa9b5f2207599d0"
 DEPENDS += " \
     glm \
     vulkan-loader \
-    \
-    compiler-rt \
-    libcxx \
-    openmp \
 "
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
@@ -47,12 +43,6 @@ PACKAGECONFIG[dfb] = "-DUSE_DIRECTFB_WSI=ON"
 PACKAGECONFIG[wayland] = "-DUSE_WAYLAND_WSI=ON,,wayland wayland-native wayland-protocols"
 PACKAGECONFIG[headless] = "-DUSE_HEADLESS=ON"
 PACKAGECONFIG[x11] = ",,libxcb libx11 libxrandr"
-
-RUNTIME = "llvm"
-TOOLCHAIN = "clang"
-PREFERRED_PROVIDER_libgcc = "compiler-rt"
-PREFERRED_PROVIDER_libgomp = "openmp"
-LIBCPLUSPLUS = "-stdlib=libc++"
 
 EXTRA_OECMAKE += " \
     -DRESOURCE_INSTALL_DIR=${datadir}/vulkan-samples/assets \
