@@ -22,15 +22,11 @@ DEPENDS:class-target += "\
 
 REQUIRED_DISTRO_FEATURES:class-target = "vulkan"
 
-RUNTIME:class-native = "llvm"
-TOOLCHAIN:class-native = "clang"
-PREFERRED_PROVIDER_libgcc:class-native = "compiler-rt"
-LIBCPLUSPLUS:class-native = "-stdlib=libc++"
+RUNTIME = "llvm"
+TOOLCHAIN = "clang"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
+LIBCPLUSPLUS = "-stdlib=libc++"
 
-RUNTIME:class-target = "llvm"
-TOOLCHAIN:class-target = "clang"
-PREFERRED_PROVIDER_libgcc:class-target = "compiler-rt"
-LIBCPLUSPLUS:class-target = "-stdlib=libc++"
 
 SRCREV = "3e556588fc7b0e901c3a0af96f1bd279891883cf"
 
@@ -68,7 +64,7 @@ EXTRA_OECMAKE:class-target += " \
     -D FILAMENT_BUILD_FILAMAT=ON \
     -D FILAMENT_SKIP_SAMPLES=ON \
     -D FILAMENT_SKIP_SDL2=ON \
-    -D FILAMENT_ENABLE_LTO=ON \
+    -D FILAMENT_ENABLE_LTO=OFF \
     -D DIST_ARCH=${BUILD_ARCH} \
     -D IMPORT_EXECUTABLES_DIR=. \
     -D FILAMENT_HOST_TOOLS_ROOT=${UNPACKDIR}/host_tools/bin \
