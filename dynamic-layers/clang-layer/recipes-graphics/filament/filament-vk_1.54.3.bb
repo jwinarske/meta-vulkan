@@ -22,12 +22,20 @@ DEPENDS:class-target += "\
 
 REQUIRED_DISTRO_FEATURES:class-target = "vulkan"
 
-TOOLCHAIN = "clang"
-TC_CXX_RUNTIME = "llvm"
-PREFERRED_PROVIDER_llvm = "clang"
-PREFERRED_PROVIDER_llvm-native = "clang-native"
-PREFERRED_PROVIDER_libgcc = "compiler-rt"
-LIBCPLUSPLUS = "-stdlib=libc++"
+
+TOOLCHAIN:class-native = "clang"
+TC_CXX_RUNTIME:class-native = "llvm"
+PREFERRED_PROVIDER_llvm:class-native = "clang"
+PREFERRED_PROVIDER_llvm-native:class-native = "clang-native"
+PREFERRED_PROVIDER_libgcc:class-native = "compiler-rt"
+LIBCPLUSPLUS:class-native = "-stdlib=libc++"
+
+TOOLCHAIN:class-target = "clang"
+TC_CXX_RUNTIME:class-target = "llvm"
+PREFERRED_PROVIDER_llvm:class-target = "clang"
+PREFERRED_PROVIDER_llvm-native:class-target = "clang-native"
+PREFERRED_PROVIDER_libgcc:class-target = "compiler-rt"
+LIBCPLUSPLUS:class-target = "-stdlib=libc++"
 
 
 SRCREV = "3e556588fc7b0e901c3a0af96f1bd279891883cf"
