@@ -6,7 +6,7 @@ HOMEPAGE = "https://github.com/SaschaWillems/VulkanCapsViewer"
 BUGTRACKER = "https://github.com/SaschaWillems/VulkanCapsViewer/issues"
 SECTION = "graphics"
 CVE_PRODUCT = ""
-LICENSE = "LGPL-3.0"
+LICENSE = "LGPL-3.0-only"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=0389d9d616b56125bd46fcb2cb900a8b"
 
 DEPENDS += " \
@@ -16,7 +16,7 @@ DEPENDS += " \
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
 
-SRCREV = "ae13fe001605bb21183bf67c4f50645c1c35d76b"
+SRCREV = "5c8298e03c39b813f2610d4c879ce5d191ab29b9"
 
 SRC_URI = "\
     gitsm://github.com/SaschaWillems/VulkanCapsViewer.git;protocol=https;branch=master \
