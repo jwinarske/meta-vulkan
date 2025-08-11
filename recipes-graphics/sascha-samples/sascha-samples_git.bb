@@ -12,13 +12,25 @@ LIC_FILES_CHKSUM = "file://LICENSE.md;md5=dcf473723faabf17baa9b5f2207599d0"
 DEPENDS += " \
     glm \
     vulkan-loader \
+    compiler-rt \
+    libcxx \
+    openmp \        
 "
 
 REQUIRED_DISTRO_FEATURES = "vulkan"
 
-SRCREV = "24591c6570904047818aafbb8089827fc1a86354"
+SRCREV = "ca9be0c589eca501e12f4a730633b7c5d96abd17"
 
 SRC_URI = "gitsm://github.com/SaschaWillems/Vulkan.git;protocol=https;name=samples;branch=master"
+
+TOOLCHAIN = "clang"
+TOOLCHAIN_NATIVE = "clang"
+TC_CXX_RUNTIME = "llvm"
+PREFERRED_PROVIDER_llvm = "clang"
+PREFERRED_PROVIDER_llvm-native = "clang-native"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgomp = "openmp"
+LIBCPLUSPLUS = "-stdlib=libc++"
 
 inherit cmake features_check pkgconfig
 
@@ -52,5 +64,7 @@ EXTRA_OECMAKE += " \
 FILES:${PN} += " \
     ${datadir} \
 "
+
+INSANE_SKIP:${PN} = "buildpaths"
 
 BBCLASSEXTEND = ""
