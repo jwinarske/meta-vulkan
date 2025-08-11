@@ -148,17 +148,27 @@ do_install:append:class-target () {
     install -d ${D}${libdir}/filament
     mv ${D}${libdir}/*/*.a ${D}${libdir}/filament
     rm -rf ${D}${libdir}/${BUILD_ARCH}
+
+    # prevent system conflict
+    rm -rf "${D}${libdir}/cmake"
+    rm -rf "${D}${libdir}/pkgconfig"
+    rm -rf "${D}${includedir}/spirv-tools"
+    rm "${D}${libdir}/libSPIRV-Tools-shared.so"
+
 }
 
 PACKAGES =+ "${PN}-host-tools"
 
-
 INHIBIT_PACKAGE_DEBUG_SPLIT:class-target = "1"
 
-FILES:${PN}-staticdev += "${libdir}"
+FILES:${PN}-staticdev += "\
+    ${libdir}/filament \
+    ${libdir}/*.a \
+"
+
 INSANE_SKIP:${PN}-staticdev = "buildpaths"
 
-FILES:${PN}-dev += "${includedir}"
+FILES:${PN}-dev = "${includedir}"
 
 FILES:${PN}-host-tools = "${datadir}"
 
