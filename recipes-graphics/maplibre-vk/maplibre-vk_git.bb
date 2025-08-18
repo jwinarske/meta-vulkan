@@ -13,9 +13,11 @@ LIC_FILES_CHKSUM = "\
 "
 
 DEPENDS += "\
+    compiler-rt \
     curl \
     icu \
     jpeg \
+    libcxx \
     libpng \
     libwebp \
     libuv \
@@ -36,6 +38,15 @@ SRC_URI = "\
 "
 
 SRCREV = "core-fe158c7e9b0b3f748f88d34ad384a7bcbc2cf903"
+
+TOOLCHAIN = "clang"
+TOOLCHAIN_NATIVE = "clang"
+TC_CXX_RUNTIME = "llvm"
+PREFERRED_PROVIDER_llvm = "clang"
+PREFERRED_PROVIDER_llvm-native = "clang-native"
+PREFERRED_PROVIDER_libgcc = "compiler-rt"
+PREFERRED_PROVIDER_libgomp = "openmp"
+LIBCPLUSPLUS = "-stdlib=libc++"
 
 inherit pkgconfig cmake features_check
 
