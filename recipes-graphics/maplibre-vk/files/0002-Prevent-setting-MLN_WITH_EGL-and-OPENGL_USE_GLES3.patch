@@ -1,0 +1,29 @@
+From f408a60717187544ddb64a4036590bbb529f25f3 Mon Sep 17 00:00:00 2001
+From: Joel Winarske <joel.winarske@gmail.com>
+Date: Mon, 18 Aug 2025 20:40:57 +0000
+Subject: [PATCH] Prevent setting MLN_WITH_EGL and OPENGL_USE_GLES3 when 
+ setting MLN_WITH_VULKAN
+
+Upstream-Status: Pending
+
+Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
+---
+ platform/linux/linux.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/platform/linux/linux.cmake b/platform/linux/linux.cmake
+index 5abc3f619b2..019028b7ccf 100644
+--- a/platform/linux/linux.cmake
++++ b/platform/linux/linux.cmake
+@@ -16,7 +16,7 @@ pkg_search_module(ICUUC icu-uc)
+ pkg_search_module(ICUI18N icu-i18n)
+ find_program(ARMERGE NAMES armerge)
+ 
+-if(MLN_WITH_WAYLAND)
++if(MLN_WITH_WAYLAND AND NOT MLN_WITH_VULKAN)
+     # See https://github.com/maplibre/maplibre-native/pull/2022
+ 
+     # MLN_WITH_EGL needs to be set for Wayland, otherwise this CMakeLists will
+-- 
+2.50.1
+

@@ -27,14 +27,15 @@ RDEPENDS:${PN} += "\
     vulkan-loader \
 "
 
-REQUIRED_DISTRO_FEATURES = "opengl vulkan"
+REQUIRED_DISTRO_FEATURES = "vulkan"
 
 SRC_URI = "\
     gitsm://github.com/maplibre/maplibre-native.git;protocol=https;branch=main \
-    file://0001-Remove-parts-for-wayland-vulkan.patch \
+        file://0001-SPIRV-include-cstdint.patch \
+        file://0002-Prevent-setting-MLN_WITH_EGL-and-OPENGL_USE_GLES3.patch \
 "
 
-SRCREV = "b7bf48683cee22a35363e9a310893eb6b47c1a57"
+SRCREV = "core-fe158c7e9b0b3f748f88d34ad384a7bcbc2cf903"
 
 inherit pkgconfig cmake features_check
 
@@ -49,32 +50,34 @@ EXTRA_OECMAKE += " \
     -D BUILD_SHARED_LIBS=OFF \
     -D MLN_WITH_WERROR=OFF \
     -D MLN_WITH_VULKAN=ON \
-    -D MLN_DRAWABLE_RENDERER=ON \
     -D MLN_LEGACY_RENDERER=OFF \
     -D MLN_WITH_EGL=OFF \
     -D MLN_WITH_OPENGL=OFF \
+    -D MLN_WITH_GLFW=OFF \
     "
 
 do_install:append() {
-    install -d ${D}${libdir}
+    install -d ${D}${libdir}/maplibre
 
-    cp ${B}/libmbgl-*.a ${D}${libdir}
+    cp ${B}/libmbgl-*.a ${D}${libdir}/maplibre
 
-    install -d ${D}${libdir}/vendor
-    install -d ${D}${libdir}/vendor/glslang
-    install -d ${D}${libdir}/vendor/glslang/SPIRV
+    install -d ${D}${libdir}/maplibre/vendor
+    install -d ${D}${libdir}/maplibre/vendor/glslang
+    install -d ${D}${libdir}/maplibre/vendor/glslang/SPIRV
 
-    cp ${B}/vendor/glslang/SPIRV/libSPIRV.a                             ${D}${libdir}/vendor/glslang/SPIRV
-    cp ${B}/vendor/glslang/SPIRV/libSPVRemapper.a                       ${D}${libdir}/vendor/glslang/SPIRV
+    cp ${B}/vendor/glslang/SPIRV/libSPIRV.a                             ${D}${libdir}/maplibre/vendor/glslang/SPIRV
+    cp ${B}/vendor/glslang/SPIRV/libSPVRemapper.a                       ${D}${libdir}/maplibre/vendor/glslang/SPIRV
 
     install -d ${D}${libdir}/vendor/glslang/glslang
-    cp ${B}/vendor/glslang/glslang/libglslang.a                         ${D}${libdir}/vendor/glslang/glslang
-    cp ${B}/vendor/glslang/glslang/libMachineIndependent.a              ${D}${libdir}/vendor/glslang/glslang
-    cp ${B}/vendor/glslang/glslang/libGenericCodeGen.a                  ${D}${libdir}/vendor/glslang/glslang
-    cp ${B}/vendor/glslang/glslang/libglslang-default-resource-limits.a ${D}${libdir}/vendor/glslang/glslang
-    cp ${B}/vendor/glslang/glslang/OSDependent/Unix/libOSDependent.a    ${D}${libdir}/vendor/glslang/glslang
+    cp ${B}/vendor/glslang/glslang/libglslang.a                         ${D}${libdir}/maplibre/vendor/glslang/glslang
+    cp ${B}/vendor/glslang/glslang/libMachineIndependent.a              ${D}${libdir}/maplibre/vendor/glslang/glslang
+    cp ${B}/vendor/glslang/glslang/libGenericCodeGen.a                  ${D}${libdir}/maplibre/vendor/glslang/glslang
+    cp ${B}/vendor/glslang/glslang/libglslang-default-resource-limits.a ${D}${libdir}/maplibre/vendor/glslang/glslang
+    cp ${B}/vendor/glslang/glslang/OSDependent/Unix/libOSDependent.a    ${D}${libdir}/maplibre/vendor/glslang/glslang
 }
 
 FILES:${PN}-staticdev += "${libdir}"
+
+INSANE_SKIP:${PN}-staticdev = "buildpaths"
 
 BBCLASSEXTEND = ""
