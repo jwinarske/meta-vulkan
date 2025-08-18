@@ -1,0 +1,28 @@
+From 4e53367d4f889df7dd742d992287e5e6f29fabc7 Mon Sep 17 00:00:00 2001
+From: Joel Winarske <joel.winarske@gmail.com>
+Date: Thu, 14 Aug 2025 15:31:59 +0000
+Subject: [PATCH] minimum cmake version
+
+Upstream-Status: Inappropriate
+
+Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
+---
+ third_party/marl/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/third_party/marl/CMakeLists.txt b/third_party/marl/CMakeLists.txt
+index 33ff545110..011f27a321 100644
+--- a/third_party/marl/CMakeLists.txt
++++ b/third_party/marl/CMakeLists.txt
+@@ -12,7 +12,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-cmake_minimum_required(VERSION 3.0)
++cmake_minimum_required(VERSION 3.5)
+ 
+ include(cmake/parse_version.cmake)
+ parse_version("${CMAKE_CURRENT_SOURCE_DIR}/CHANGES.md" MARL)
+-- 
+2.50.1
+
