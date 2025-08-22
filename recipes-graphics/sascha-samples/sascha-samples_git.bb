@@ -66,5 +66,6 @@ FILES:${PN} += " \
 "
 
 INSANE_SKIP:${PN} = "buildpaths"
+INSANE_SKIP:${PN}-dbg = "buildpaths"
 
 BBCLASSEXTEND = ""
