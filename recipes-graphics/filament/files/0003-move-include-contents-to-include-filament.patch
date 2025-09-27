@@ -1,7 +1,4 @@
 Upstream-Status: Inappropriate
-
-Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
----
 diff --git a/filament/CMakeLists.txt b/filament/CMakeLists.txt
 index fae6565..3bbb22b 100644
 --- a/filament/CMakeLists.txt

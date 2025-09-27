@@ -33,16 +33,16 @@ PREFERRED_PROVIDER_libgcc = "compiler-rt"
 LIBCPLUSPLUS = "-stdlib=libc++"
 
 
-SRCREV = "v1.60.1"
+SRCREV = "v1.65.2"
 
 SRC_URI = "\
     git://github.com/google/filament.git;protocol=https;branch=release \
-    file://0001-disable-backend-tests.patch \
+    file://0001-disable-backend-tests-1.65.2.patch \
     file://0002-install-required-files.patch \
     file://0003-move-include-contents-to-include-filament.patch \
-    file://0004-move-libraries-so-they-install.patch \
-    file://0005-return-shader-type-mobile-for-linux-vulkan.patch \
-    file://0006-spirv-tools-threads.patch \
+    file://0004-move-libraries-so-they-install-1.65.2.patch \
+    file://0005-spirv-tools-threads.patch \
+    file://0006-return-shader-type-mobile-for-linux-vulkan.patch \
     file://ImportExecutables-Release.cmake \
     file://ImportExecutables-Debug.cmake \
 "
@@ -73,7 +73,7 @@ EXTRA_OECMAKE:class-native += " \
 
 EXTRA_OECMAKE:class-target += " \
     -D BUILD_SHARED_LIBS=OFF \
-    -D CMAKE_BUILD_TYPE=Debug \
+    -D CMAKE_BUILD_TYPE=Release \
     -D CMAKE_BUILD_WITH_INSTALL_RPATH=ON \
     -D FILAMENT_LINUX_IS_MOBILE=ON \
     -D FILAMENT_BUILD_FILAMAT=ON \
@@ -156,8 +156,6 @@ do_install:append:class-target () {
     rm -rf "${D}${libdir}/cmake"
     rm -rf "${D}${libdir}/pkgconfig"
     rm -rf "${D}${includedir}/spirv-tools"
-    rm "${D}${libdir}/libSPIRV-Tools-shared.so"
-
 }
 
 PACKAGES =+ "${PN}-host-tools"
