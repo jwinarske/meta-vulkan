@@ -50,12 +50,16 @@ PACKAGECONFIG[kms] = "-Dkms=true,-Dkms=false,drm virtual/libgbm"
 PACKAGECONFIG[wayland] = "-Dwayland=true,-Dwayland=false,wayland wayland-native wayland-protocols"
 PACKAGECONFIG[x11] = "-Dxcb=true,-Dxcb=false,virtual/libx11 libxcb xcb-util-wm"
 
-do_install() {
-    install -d ${D}${bindir}
-    cp ${WORKDIR}/build/src/vkmark ${D}${bindir}
+WAYLAND_IS_PRESENT = "${@bb.utils.filter('DISTRO_FEATURES', 'wayland', d)}"
+X11_IS_PRESENT = "${@bb.utils.filter('DISTRO_FEATURES', 'x11', d)}"
 
-    install -d ${D}${libdir}
-    cp ${WORKDIR}/build/src/wayland.so ${D}${libdir}
+do_install() {
+    install -d ${D}${datadir}
+    install -d ${D}${datadir}/vkmark
+    cp ${B}/src/vkmark ${D}${datadir}/vkmark
+    cp ${B}/src/headless.so ${D}${datadir}/vkmark
+    test -z $WAYLAND_IS_PRESENT && cp ${B}/src/wayland.so ${D}${datadir}/vkmark
+    test -z $X11_IS_PRESENT     && cp ${B}/src/display.so ${D}${datadir}/vkmark && cp ${B}/src/xcb.so ${D}${datadir}/vkmark
 
     install -d ${D}${datadir}/vkmark/models
     cp -r ${S}/data/models/* ${D}${datadir}/vkmark/models
@@ -69,11 +73,7 @@ do_install() {
     rm -rf ${D}${datadir}/man
 }
 
-FILES:${PN} += "\
-    ${bindir} \
-    ${libdir} \
-    ${datadir} \
-    "
+FILES:${PN} += "${datadir}"
 
 FILES:${PN}-dev = ""
 
