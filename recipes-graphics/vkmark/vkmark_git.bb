@@ -74,21 +74,11 @@ do_install() {
     install -d ${D}${datadir}/vkmark/textures
     cp -r ${S}/data/textures/* ${D}${datadir}/vkmark/textures
 
-    install -d ${D}${datadir}/vkmark/tests
-    cp -r ${B}/tests/testws1.so ${D}${datadir}/vkmark/tests
-    cp -r ${B}/tests/testws2.so ${D}${datadir}/vkmark/tests
-    cp -r ${B}/tests/testws3.so ${D}${datadir}/vkmark/tests
-    cp -r ${B}/tests/vkmark-tests ${D}${datadir}/vkmark/tests
-
     rm -rf ${D}${datadir}/man
 }
 
 FILES:${PN} += "${datadir}"
 
 FILES:${PN}-dev = ""
-
-# only required for vkmark-tests
-INSANE_SKIP:${PN} = "buildpaths"
-INSANE_SKIP:${PN}-dbg = "buildpaths"
 
 BBCLASSEXTEND = ""
