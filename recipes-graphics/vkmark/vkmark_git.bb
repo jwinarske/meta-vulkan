@@ -43,6 +43,7 @@ PACKAGECONFIG ??= " \
 # options
 
 PACKAGECONFIG:remove ??= " \
+    kms \
     ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'x11', '', d)} \
 "
 
@@ -56,10 +57,13 @@ X11_IS_PRESENT = "${@bb.utils.filter('DISTRO_FEATURES', 'x11', d)}"
 do_install() {
     install -d ${D}${datadir}
     install -d ${D}${datadir}/vkmark
-    cp ${B}/src/vkmark ${D}${datadir}/vkmark
+
+    cp ${B}/src/vkmark      ${D}${datadir}/vkmark
     cp ${B}/src/headless.so ${D}${datadir}/vkmark
-    test -z $WAYLAND_IS_PRESENT && cp ${B}/src/wayland.so ${D}${datadir}/vkmark
-    test -z $X11_IS_PRESENT     && cp ${B}/src/display.so ${D}${datadir}/vkmark && cp ${B}/src/xcb.so ${D}${datadir}/vkmark
+    cp ${B}/src/display.so  ${D}${datadir}/vkmark
+
+    test -n "${WAYLAND_IS_PRESENT}" && cp ${B}/src/wayland.so ${D}${datadir}/vkmark
+    test -n "${X11_IS_PRESENT}"     && cp ${B}/src/xcb.so     ${D}${datadir}/vkmark
 
     install -d ${D}${datadir}/vkmark/models
     cp -r ${S}/data/models/* ${D}${datadir}/vkmark/models
@@ -70,11 +74,21 @@ do_install() {
     install -d ${D}${datadir}/vkmark/textures
     cp -r ${S}/data/textures/* ${D}${datadir}/vkmark/textures
 
+    install -d ${D}${datadir}/vkmark/tests
+    cp -r ${B}/tests/testws1.so ${D}${datadir}/vkmark/tests
+    cp -r ${B}/tests/testws2.so ${D}${datadir}/vkmark/tests
+    cp -r ${B}/tests/testws3.so ${D}${datadir}/vkmark/tests
+    cp -r ${B}/tests/vkmark-tests ${D}${datadir}/vkmark/tests
+
     rm -rf ${D}${datadir}/man
 }
 
 FILES:${PN} += "${datadir}"
 
 FILES:${PN}-dev = ""
+
+# only required for vkmark-tests
+INSANE_SKIP:${PN} = "buildpaths"
+INSANE_SKIP:${PN}-dbg = "buildpaths"
 
 BBCLASSEXTEND = ""
