@@ -31,28 +31,25 @@ TC_CXX_RUNTIME = "llvm"
 PREFERRED_PROVIDER_llvm = "clang"
 PREFERRED_PROVIDER_llvm-native = "clang-native"
 PREFERRED_PROVIDER_libgcc = "compiler-rt"
-PREFERRED_PROVIDER_libgomp = "openmp"
 LIBCPLUSPLUS = "-stdlib=libc++"
 
 PACKAGECONFIG ??= " \
+    kms \
     ${@bb.utils.filter('DISTRO_FEATURES', 'wayland x11', d)} \
 "
 
-# resolve the most common collision automatically by preferring wayland. this
-# really only removes the unnecessary runtime deps. it doesn't change linking
-# options
-
+# prefer wayland if both are present
 PACKAGECONFIG:remove ??= " \
-    kms \
     ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', 'x11', '', d)} \
 "
 
 PACKAGECONFIG[kms] = "-Dkms=true,-Dkms=false,drm virtual/libgbm"
-PACKAGECONFIG[wayland] = "-Dwayland=true,-Dwayland=false,wayland wayland-native wayland-protocols"
 PACKAGECONFIG[x11] = "-Dxcb=true,-Dxcb=false,virtual/libx11 libxcb xcb-util-wm"
+PACKAGECONFIG[wayland] = "-Dwayland=true,-Dwayland=false,wayland wayland-native wayland-protocols"
 
-WAYLAND_IS_PRESENT = "${@bb.utils.filter('DISTRO_FEATURES', 'wayland', d)}"
-X11_IS_PRESENT = "${@bb.utils.filter('DISTRO_FEATURES', 'x11', d)}"
+KMS_IS_PRESENT = "${@bb.utils.filter('PACKAGECONFIG', 'kms', d)}"
+X11_IS_PRESENT = "${@bb.utils.filter('PACKAGECONFIG', 'x11', d)}"
+WAYLAND_IS_PRESENT = "${@bb.utils.filter('PACKAGECONFIG', 'wayland', d)}"
 
 do_install() {
     install -d ${D}${datadir}
@@ -62,8 +59,9 @@ do_install() {
     cp ${B}/src/headless.so ${D}${datadir}/vkmark
     cp ${B}/src/display.so  ${D}${datadir}/vkmark
 
-    test -n "${WAYLAND_IS_PRESENT}" && cp ${B}/src/wayland.so ${D}${datadir}/vkmark
+    test -n "${KMS_IS_PRESENT}"     && cp ${B}/src/kms.so     ${D}${datadir}/vkmark
     test -n "${X11_IS_PRESENT}"     && cp ${B}/src/xcb.so     ${D}${datadir}/vkmark
+    test -n "${WAYLAND_IS_PRESENT}" && cp ${B}/src/wayland.so ${D}${datadir}/vkmark
 
     install -d ${D}${datadir}/vkmark/models
     cp -r ${S}/data/models/* ${D}${datadir}/vkmark/models
@@ -77,8 +75,6 @@ do_install() {
     rm -rf ${D}${datadir}/man
 }
 
-FILES:${PN} += "${datadir}"
-
-FILES:${PN}-dev = ""
+FILES:${PN} = "${datadir}"
 
 BBCLASSEXTEND = ""
