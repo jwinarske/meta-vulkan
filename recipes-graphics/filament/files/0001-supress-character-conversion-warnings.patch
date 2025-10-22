@@ -1,0 +1,28 @@
+From 66fcbf45d105202a13e2e5bf4601e8b9fdfbccd6 Mon Sep 17 00:00:00 2001
+From: Joel Winarske <joel.winarske@gmail.com>
+Date: Tue, 21 Oct 2025 08:25:38 -0700
+Subject: [PATCH] supress character conversion warnings
+
+Upstream-Status: Inappropriate
+
+Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
+---
+ third_party/libgtest/tnt/CMakeLists.txt | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/third_party/libgtest/tnt/CMakeLists.txt b/third_party/libgtest/tnt/CMakeLists.txt
+index e77cb26cf..10d077dcd 100644
+--- a/third_party/libgtest/tnt/CMakeLists.txt
++++ b/third_party/libgtest/tnt/CMakeLists.txt
+@@ -38,3 +38,7 @@ endif()
+ # specify where the public headers of this library are
+ target_include_directories(${TARGET} PUBLIC ${PUBLIC_HDR_DIRS})
+ set_target_properties(${TARGET} PROPERTIES FOLDER ThirdParty)
++
++target_compile_options(${TARGET} INTERFACE
++        $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:GNU>>:-Wno-character-conversion>
++)
+\ No newline at end of file
+-- 
+2.51.0
+

@@ -1,0 +1,54 @@
+From f40f9d8fb2b658b5792c815b2e373dd4fa994680 Mon Sep 17 00:00:00 2001
+From: Joel Winarske <joel.winarske@gmail.com>
+Date: Tue, 21 Oct 2025 09:35:27 -0700
+Subject: [PATCH] dump vma stats
+
+Upstream-Status: Inappropriate
+
+Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
+---
+ .../backend/src/vulkan/VulkanBufferCache.cpp  | 21 +++++++++++++++++++
+ 1 file changed, 21 insertions(+)
+
+diff --git a/filament/backend/src/vulkan/VulkanBufferCache.cpp b/filament/backend/src/vulkan/VulkanBufferCache.cpp
+index 424f5758e..46490f078 100644
+--- a/filament/backend/src/vulkan/VulkanBufferCache.cpp
++++ b/filament/backend/src/vulkan/VulkanBufferCache.cpp
+@@ -24,6 +24,9 @@
+ 
+ #include <utility>
+ 
++#include <fstream>
++#include <iostream>
++
+ namespace filament::backend {
+ 
+ namespace {
+@@ -166,6 +169,24 @@ VulkanGpuBuffer const* VulkanBufferCache::allocate(VulkanBufferBinding binding,
+         FVK_LOGD << "VulkanBufferCache - allocated a vkBuffer " << gpuBuffer->vkbuffer
+                  << " of size " << numBytes << " and binding = " << static_cast<int>(binding)
+                  << "  successfully" << utils::io::endl;
++
++        char* statsString = nullptr;
++        constexpr VkBool32 detailedMap = VK_TRUE;
++        vmaBuildStatsString(mAllocator, &statsString, detailedMap);
++
++        if (statsString) {
++            try {
++                std::ofstream outFile("/tmp/vma_stats.json", std::ios::trunc | std::ios::binary);
++                if (outFile.is_open()) {
++                    outFile << statsString;
++                }
++            } catch (const std::exception& e) {
++                FVK_LOGE << "Error writing /tmp/vma_stats.json: " << e.what() << utils::io::endl;
++            }
++
++            // Free the stats string after use.
++            vmaFreeStatsString(mAllocator, statsString);
++        }
+     }
+ #endif // FVK_DEBUG_VULKAN_BUFFER_CACHE
+ 
+-- 
+2.51.0
+

@@ -1,0 +1,28 @@
+From 0882ca6f2af765e104632e2c56d0387ba1df64d3 Mon Sep 17 00:00:00 2001
+From: Joel Winarske <joel.winarske@gmail.com>
+Date: Tue, 21 Oct 2025 08:43:52 -0700
+Subject: [PATCH] enable buffer cache and staging allocation debug
+
+Upstream-Status: Inappropriate
+
+Signed-off-by: Joel Winarske <joel.winarske@gmail.com>
+---
+ filament/backend/src/vulkan/VulkanConstants.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/filament/backend/src/vulkan/VulkanConstants.h b/filament/backend/src/vulkan/VulkanConstants.h
+index 2c92277ef..59f9512f8 100644
+--- a/filament/backend/src/vulkan/VulkanConstants.h
++++ b/filament/backend/src/vulkan/VulkanConstants.h
+@@ -95,7 +95,7 @@
+ #endif
+ 
+ #ifndef NDEBUG
+-#define FVK_DEBUG_FLAGS (FVK_DEBUG_PERFORMANCE | FVK_DEBUG_FORWARDED_FLAG)
++#define FVK_DEBUG_FLAGS (FVK_DEBUG_PERFORMANCE | FVK_DEBUG_FORWARDED_FLAG | FVK_DEBUG_VULKAN_BUFFER_CACHE | FVK_DEBUG_STAGING_ALLOCATION)
+ #else
+ #define FVK_DEBUG_FLAGS 0
+ #endif
+-- 
+2.51.0
+
