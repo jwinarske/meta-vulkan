@@ -37,7 +37,8 @@ SRC_URI = "\
         file://0002-Prevent-setting-MLN_WITH_EGL-and-OPENGL_USE_GLES3.patch \
 "
 
-SRCREV = "core-fe158c7e9b0b3f748f88d34ad384a7bcbc2cf903"
+# core-fe158c7e9b0b3f748f88d34ad384a7bcbc2cf903
+SRCREV = "fe158c7e9b0b3f748f88d34ad384a7bcbc2cf903"
 
 TOOLCHAIN = "clang"
 TOOLCHAIN_NATIVE = "clang"

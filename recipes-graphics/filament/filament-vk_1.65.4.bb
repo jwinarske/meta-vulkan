@@ -33,7 +33,8 @@ PREFERRED_PROVIDER_libgcc = "compiler-rt"
 LIBCPLUSPLUS = "-stdlib=libc++"
 
 
-SRCREV = "v1.65.4"
+# v1.65.4
+SRCREV = "2a86c0c60ecce9443fc34631570e924721b20b40"
 
 SRC_URI = "\
     git://github.com/google/filament.git;protocol=https;branch=release \
