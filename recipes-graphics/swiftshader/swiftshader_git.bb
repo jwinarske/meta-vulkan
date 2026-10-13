@@ -27,7 +27,9 @@ SRC_URI:append:riscv64 = " \
     file://0001-CMake-riscv-support.patch \
 "
 
-SRCREV = "f72761e8676601271ae282f9581cde771db57a5b"
+# base of the swiftshader pinned by flutter master DEPS (flutter adds a
+# GN-only LLVM 16 change on top)
+SRCREV = "a7c547b55474c3d8bde53711eae24ae0e28bbc0a"
 
 inherit cmake
 
