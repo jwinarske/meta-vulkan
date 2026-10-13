@@ -23,7 +23,7 @@ SRC_URI = "\
     file://0002-marl-cmake-3.5.patch \
 "
 
-SRC_URI:riscv64 = "\
+SRC_URI:append:riscv64 = " \
     file://0001-CMake-riscv-support.patch \
 "
 
@@ -72,6 +72,12 @@ EXTRA_OECMAKE += " \
     -D SWIFTSHADER_USE_GROUP_SOURCES=OFF \
     -D SWIFTSHADER_WARNINGS_AS_ERRORS=OFF \
     "
+
+# Reactor on RISC-V only supports JITLink's ObjectLinkingLayer, which needs
+# the bundled LLVM 16 (default 10.0 lacks InProcessMemoryManager::Create)
+EXTRA_OECMAKE:append:riscv64 = " -DSWIFTSHADER_LLVM_VERSION=16.0"
+# bundled LLVM 16 relies on <cstdint> being pulled in transitively (GCC 13+)
+CXXFLAGS:append:riscv64 = " -include cstdint"
 
 do_install () {
 
